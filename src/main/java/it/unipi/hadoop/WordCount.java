@@ -15,6 +15,12 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class WordCount
 {
+
+    //user-defined java counters
+    enum PageRankInfo {
+        NUMBER_OF_PAGES
+    }
+
     public static class NewMapper extends Mapper<Object, Text, Text, IntWritable>
     {
         private final static IntWritable one = new IntWritable(1);
@@ -27,6 +33,8 @@ public class WordCount
                 word.set(itr.nextToken());
                 context.write(word, one);
             }
+
+            context.getCounter(PageRankInfo.NUMBER_OF_PAGES).increment(1);
         }
     }
 
@@ -58,6 +66,8 @@ public class WordCount
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
+        job.waitForCompletion(true);
+
+        System.out.println(":::::::::::::::::::::::::::::::::::::::NUMERO DI PAGINE: "+job.getCounters().findCounter(PageRankInfo.NUMBER_OF_PAGES).getValue());
     }
 }
