@@ -3,6 +3,7 @@ package it.unipi.hadoop.job;
 import it.unipi.hadoop.dataModel.CustomCounter;
 import it.unipi.hadoop.dataModel.CustomPattern;
 import it.unipi.hadoop.dataModel.Node;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -18,7 +19,7 @@ public class NPagesAndOutlinks {
 
 
     //::::::::::::::::::::::::::::::::::::::: MAPPER :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    public static class NPagesAndOutlinksMapper extends Mapper<LongWritable, Text, Text, Node>
+    public static class NPagesAndOutlinksMapper extends Mapper<LongWritable, Text, Text, IntWritable>
     {
         Node node;
         @Override
@@ -39,7 +40,7 @@ public class NPagesAndOutlinks {
 
             if(titlePage!=null){
                 node.setOutlinks(CustomPattern.getOutlinks(line));
-                context.write(new Text(titlePage), node);
+                context.write(new Text(titlePage), new IntWritable(1));
 
             }
 

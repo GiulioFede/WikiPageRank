@@ -59,7 +59,7 @@ public class WikiPageRank
         nPagesAndOutlinks_job.setMapperClass(NPagesAndOutlinks.NPagesAndOutlinksMapper.class);
 
         nPagesAndOutlinks_job.setOutputKeyClass(Text.class);
-        nPagesAndOutlinks_job.setOutputValueClass(Node.class);
+        nPagesAndOutlinks_job.setOutputValueClass(IntWritable.class);
 
         //wait
         boolean success = nPagesAndOutlinks_job.waitForCompletion(true);
