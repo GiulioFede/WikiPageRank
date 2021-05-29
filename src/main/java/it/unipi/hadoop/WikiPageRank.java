@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 import it.unipi.hadoop.dataModel.CustomCounter;
+import it.unipi.hadoop.dataModel.CustomOutputFormat;
 import it.unipi.hadoop.dataModel.Node;
 import it.unipi.hadoop.job.NPagesAndOutlinks;
 import org.apache.hadoop.conf.Configuration;
@@ -16,7 +17,6 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.SequenceFileAsBinaryOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
@@ -66,7 +66,7 @@ public class WikiPageRank
         nPagesAndOutlinks_job.setMapOutputValueClass(Node.class);
 
         nPagesAndOutlinks_job.setInputFormatClass(TextInputFormat.class);
-        nPagesAndOutlinks_job.setOutputFormatClass(SequenceFileAsBinaryOutputFormat.class );
+        nPagesAndOutlinks_job.setOutputFormatClass(SequenceFileOutputFormat.class);
 
         //wait
         boolean success = nPagesAndOutlinks_job.waitForCompletion(true);
