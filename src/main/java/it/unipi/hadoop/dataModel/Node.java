@@ -15,13 +15,14 @@ package it.unipi.hadoop.dataModel;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.mapreduce.OutputFormat;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Node implements Writable,Comparable<Node> {
+public class Node implements Writable,Comparable<Node>  {
 
     private String outlinks;
     private double pageRank;

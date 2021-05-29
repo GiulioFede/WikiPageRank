@@ -33,8 +33,10 @@ public class CustomPattern {
             Matcher outlinks_match = link_pat.matcher(text);
             while(outlinks_match.find()){
                 //here i have one link
-                outlinks+=outlinks_match.group(1)+"*$*";
+                outlinks+="*$*"+outlinks_match.group(1);
             }
+
+            outlinks+="*$*";
         }
 
         return outlinks;

@@ -20,7 +20,7 @@ public class NPagesAndOutlinks {
 
 
     //::::::::::::::::::::::::::::::::::::::: MAPPER :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    public static class NPagesAndOutlinksMapper extends Mapper<LongWritable, Text, Text, Text>
+    public static class NPagesAndOutlinksMapper extends Mapper<LongWritable, Text, Text, Node>
     {
         Node node;
         @Override
@@ -41,24 +41,22 @@ public class NPagesAndOutlinks {
             if(titlePage!=null){
                 node.setOutlinks(CustomPattern.getOutlinks(line));
                 //to avoid saving also the default fields of the Node class (thus avoid wasting space on HDFS) we send only the outlinks
-                context.write(new Text(titlePage), new Text(node.getOutlinks()));
+                context.write(new Text(titlePage), node);
 
                 //increment number of pages
                 context.getCounter(CustomCounter.NUMBER_OF_PAGES).increment(1);
             }
         }
 
-    }
-
-    public static class NPagesAndOutlinksReducer extends Reducer<Text,IntWritable,Text,IntWritable>
-    {
         @Override
-        protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
-
-            for(IntWritable val : values)
-                context.write(new Text(key), val);
+        protected void cleanup(Context context) throws IOException, InterruptedException {
+            super.cleanup(context);
+            //initialize this counter for the future job
+            context.getCounter(CustomCounter.NUMBER_OF_RANK_ITERATIONS).setValue(0);
         }
     }
+
+
 
     /*
             Perchè non utilizziamo il reducer: supponiamo che nel file ogni pagina stia su una sola riga e che quindi non si ripeta la stessa

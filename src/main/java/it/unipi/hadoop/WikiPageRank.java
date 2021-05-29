@@ -16,6 +16,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class WikiPageRank
@@ -54,11 +55,44 @@ public class WikiPageRank
         nPagesAndOutlinks_job.setJobName("Compute number of pages and outlinks ");
 
         FileInputFormat.addInputPath(nPagesAndOutlinks_job, input);
-        FileOutputFormat.setOutputPath(nPagesAndOutlinks_job, output);
+        FileOutputFormat.setOutputPath(nPagesAndOutlinks_job, new Path(output+"/firstJob"));
 
         nPagesAndOutlinks_job.setNumReduceTasks(0);
 
         nPagesAndOutlinks_job.setMapperClass(NPagesAndOutlinks.NPagesAndOutlinksMapper.class);
+
+        nPagesAndOutlinks_job.setMapOutputKeyClass(Text.class);
+        nPagesAndOutlinks_job.setMapOutputValueClass(Node.class);
+
+        nPagesAndOutlinks_job.setInputFormatClass(TextInputFormat.class);
+        nPagesAndOutlinks_job.setOutputFormatClass(SequenceFileOutputFormat.class );
+
+        //wait
+        boolean success = nPagesAndOutlinks_job.waitForCompletion(true);
+        if(success)
+            System.out.println("Lavoro completato");
+        else {
+            System.out.println("Lavoro fallito: non è stato possibile terminare il conteggio del numero delle pagine e dei rispettivi outlinks");
+            System.exit(0);
+        }
+
+        //add field into xml configuration file (we will use that in other map reduce taks)
+        long numberOfPages = nPagesAndOutlinks_job.getCounters().findCounter(CustomCounter.NUMBER_OF_PAGES).getValue();
+        conf.set("number_of_pages",String.valueOf(numberOfPages));
+/*
+        //::::::::::::::::::::::::::::::second JOB: compute final rank until convergence:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+        Job computePageRank_job = Job.getInstance(conf);
+        computePageRank_job.setJarByClass(WikiPageRank.class);
+        computePageRank_job.setJobName("Compute page rank ");
+
+        //as input take previous result
+        FileInputFormat.addInputPath(computePageRank_job, new Path(output+"/firstJob"));
+        FileOutputFormat.setOutputPath(computePageRank_job, new Path(output+"/secondJob"));
+
+        //computePageRank_job.setNumReduceTasks(3);
+
+        computePageRank_job.setMapperClass(NPagesAndOutlinks.NPagesAndOutlinksMapper.class);
         //nPagesAndOutlinks_job.setReducerClass(NPagesAndOutlinks.NPagesAndOutlinksReducer.class);
 
         nPagesAndOutlinks_job.setMapOutputKeyClass(Text.class);
@@ -69,15 +103,20 @@ public class WikiPageRank
         nPagesAndOutlinks_job.setInputFormatClass(TextInputFormat.class);
         nPagesAndOutlinks_job.setOutputFormatClass(TextOutputFormat.class);
 
-
-
-
         //wait
-        boolean success = nPagesAndOutlinks_job.waitForCompletion(true);
+        boolean succes = nPagesAndOutlinks_job.waitForCompletion(true);
         if(success)
             System.out.println("Lavoro completato");
-        else
-            System.out.println("Lavoro fallito");
+        else {
+            System.out.println("Lavoro fallito: non è stato possibile terminare il conteggio del numero delle pagine e dei rispettivi outlinks");
+            System.exit(0);
+        }
+
+
+*/
+
+
+
 
         /*
 
