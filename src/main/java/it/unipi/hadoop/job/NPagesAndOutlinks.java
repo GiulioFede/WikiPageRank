@@ -7,6 +7,7 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 
@@ -47,6 +48,18 @@ public class NPagesAndOutlinks {
             //increment number of pages
             context.getCounter(CustomCounter.NUMBER_OF_PAGES).increment(1);
         }
+
+    }
+
+    public static class NPagesAndOutlinksReducer extends Reducer<Text,IntWritable,Text,IntWritable>
+    {
+        @Override
+        protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+            super.reduce(key, values, context);
+
+            for(IntWritable val : values)
+                context.write(new Text(key), val);
+        }
     }
 
     /*
@@ -54,4 +67,6 @@ public class NPagesAndOutlinks {
                                                pagina su più righe
             TODO: chiedere al professore se dobbiamo collezionare outlink
      */
+
+
 }
