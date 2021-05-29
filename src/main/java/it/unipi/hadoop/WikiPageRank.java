@@ -3,6 +3,9 @@ package it.unipi.hadoop;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
+import it.unipi.hadoop.dataModel.CustomCounter;
+import it.unipi.hadoop.dataModel.Node;
+import it.unipi.hadoop.job.NPagesAndOutlinks;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -20,28 +23,52 @@ public class WikiPageRank
 
     /*
             INGRESSO
-                - alfa: per convergenza
-                - wiki-micro.txt
-                - output
+                - alfa: damping factor args[0]
+                - threshold: soglia per la convergenza args[1]
+                - wiki-micro.txt args[2]
+                - output args[3]
      */
     public static void main(final String[] args) throws Exception {
         System.out.println("*** PageRank Hadoop implementation ***");
 
         Configuration conf = new Configuration();
-        System.out.println("INPUT: "+args[0]+" ,  "+args[1]+"  ,  "+args[2]);
-/*
-        if (otherArgs.length != 3) {
-            System.err.println("Usage: PageRank <#iterations> <input> <output>");
+        System.out.println("INPUT: "+args[0]+" ,  "+args[1]+"  ,  "+args[2]+"  ,  "+args[3]);
+
+        if (args.length != 4) {
+            System.err.println("Usage: PageRank <#alfa> <input> <output>");
             System.exit(1);
         }
 
-        Path input = new Path(otherArgs[1]);
-        Path output = new Path(otherArgs[2]);
+        //set from inputs
+        double dampingFactor = Double.parseDouble(args[0]);
+        double threshold = Double.parseDouble(args[1]);
+        Path input = new Path(args[2]);
+        Path output = new Path(args[3]);
 
-        System.out.println("args[0]: <#iterations>=" + otherArgs[0]);
-        System.out.println("args[1]: <input>=" + otherArgs[1]);
-        System.out.println("args[2]: <output>=" + otherArgs[2]);
+        //::::::::::::::::::::::::::::::first JOB: compute number of pages and outlinks:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+        Job nPagesAndOutlinks_job = new Job();
+        nPagesAndOutlinks_job.setJarByClass(WikiPageRank.class);
+        nPagesAndOutlinks_job.setJobName("Compute number of pages and outlinks ");
+
+        FileInputFormat.addInputPath(nPagesAndOutlinks_job, input);
+        FileOutputFormat.setOutputPath(nPagesAndOutlinks_job, output);
+
+        nPagesAndOutlinks_job.setNumReduceTasks(0);
+
+        nPagesAndOutlinks_job.setMapperClass(NPagesAndOutlinks.NPagesAndOutlinksMapper.class);
+
+        nPagesAndOutlinks_job.setOutputKeyClass(Text.class);
+        nPagesAndOutlinks_job.setOutputValueClass(Node.class);
+
+        //wait
+        boolean success = nPagesAndOutlinks_job.waitForCompletion(true);
+        if(success)
+            System.out.println("Lavoro completato");
+        else
+            System.out.println("Lavoro fallito");
+
+        /*
 
         // set number of iterations
         int iterations = Integer.parseInt(otherArgs[0]);
@@ -126,9 +153,11 @@ public class WikiPageRank
 
             //Non ho capito perchè
             fs.delete(output, true);
+*/
+        System.out.println(":::::::::::::::::::::::::::::::::::::::NUMERO DI PAGINE: "+nPagesAndOutlinks_job.getCounters().findCounter(CustomCounter.NUMBER_OF_PAGES).getValue());
 
-        System.out.println(":::::::::::::::::::::::::::::::::::::::NUMERO DI PAGINE: "+job.getCounters().findCounter(PageRankInfo.NUMBER_OF_PAGES).getValue());
+        System.exit(1);
 
- */
+
     }
 }
