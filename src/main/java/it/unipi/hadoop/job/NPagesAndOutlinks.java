@@ -48,12 +48,6 @@ public class NPagesAndOutlinks {
             }
         }
 
-        @Override
-        protected void cleanup(Context context) throws IOException, InterruptedException {
-            super.cleanup(context);
-            //initialize this counter for the future job
-            context.getCounter(CustomCounter.NUMBER_OF_RANK_ITERATIONS).setValue(0);
-        }
     }
 
 

@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 import it.unipi.hadoop.dataModel.CustomCounter;
 import it.unipi.hadoop.dataModel.Node;
 import it.unipi.hadoop.job.NPagesAndOutlinks;
+import it.unipi.hadoop.job.PageRank;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -26,7 +27,7 @@ public class WikiPageRank
 
     /*
             INGRESSO
-                - alfa: damping factor args[0]
+                - damping factor: damping factor args[0]
                 - threshold: soglia per la convergenza args[1]
                 - wiki-micro.txt args[2]
                 - output args[3]
@@ -79,8 +80,10 @@ public class WikiPageRank
         //add field into xml configuration file (we will use that in other map reduce taks)
         long numberOfPages = nPagesAndOutlinks_job.getCounters().findCounter(CustomCounter.NUMBER_OF_PAGES).getValue();
         conf.set("number_of_pages",String.valueOf(numberOfPages));
-/*
+
         //::::::::::::::::::::::::::::::second JOB: compute final rank until convergence:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+        conf.set("damping_factor",String.valueOf(dampingFactor));
 
         Job computePageRank_job = Job.getInstance(conf);
         computePageRank_job.setJarByClass(WikiPageRank.class);
@@ -92,28 +95,27 @@ public class WikiPageRank
 
         //computePageRank_job.setNumReduceTasks(3);
 
-        computePageRank_job.setMapperClass(NPagesAndOutlinks.NPagesAndOutlinksMapper.class);
-        //nPagesAndOutlinks_job.setReducerClass(NPagesAndOutlinks.NPagesAndOutlinksReducer.class);
+        computePageRank_job.setMapperClass(PageRank.PageRankMapper.class);
+        computePageRank_job.setReducerClass(PageRank.PageRankReducer.class);
 
-        nPagesAndOutlinks_job.setMapOutputKeyClass(Text.class);
-        nPagesAndOutlinks_job.setMapOutputValueClass(Text.class);
-        //nPagesAndOutlinks_job.setOutputKeyClass(Text.class);
-        //nPagesAndOutlinks_job.setOutputValueClass(IntWritable.class);
+        computePageRank_job.setMapOutputKeyClass(Text.class);
+        computePageRank_job.setMapOutputValueClass(Node.class);
+        computePageRank_job.setOutputKeyClass(Text.class);
+        computePageRank_job.setOutputValueClass(Node.class);
 
-        nPagesAndOutlinks_job.setInputFormatClass(TextInputFormat.class);
-        nPagesAndOutlinks_job.setOutputFormatClass(TextOutputFormat.class);
+        computePageRank_job.setInputFormatClass(TextInputFormat.class);
+        computePageRank_job.setOutputFormatClass(TextOutputFormat.class);
 
         //wait
-        boolean succes = nPagesAndOutlinks_job.waitForCompletion(true);
+        success = computePageRank_job.waitForCompletion(true);
         if(success)
             System.out.println("Lavoro completato");
         else {
-            System.out.println("Lavoro fallito: non è stato possibile terminare il conteggio del numero delle pagine e dei rispettivi outlinks");
+            System.out.println("Lavoro fallito: non è stato possibile calcolare il page rank");
             System.exit(0);
         }
 
 
-*/
 
 
 

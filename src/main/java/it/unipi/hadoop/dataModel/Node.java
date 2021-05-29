@@ -30,8 +30,18 @@ public class Node implements Writable,Comparable<Node>  {
 
     public Node() {
         this.outlinks = "";
-        this.pageRank = 0;
+        this.pageRank = -1;
         this.pageRankReceived = -1;
+    }
+
+    public Node(String outlinks, double pageRank, double pageRankReceived) {
+        this.outlinks = outlinks;
+        this.pageRank = pageRank;
+        this.pageRankReceived = pageRankReceived;
+    }
+
+    public static Node copy(Node n){
+        return new Node(n.getOutlinks(), n.getPageRank(), n.getPageRankReceived());
     }
 
     public String getOutlinks() {
@@ -85,6 +95,6 @@ public class Node implements Writable,Comparable<Node>  {
         /*
                 FORMAT:  ###*$* ..*$*...*$*###45###64
          */
-        return "###"+outlinks+"###"+pageRank+"###"+pageRankReceived;
+        return outlinks+"###"+pageRank+"###"+pageRankReceived;
     }
 }
