@@ -30,8 +30,8 @@ public class Node implements Writable,Comparable<Node>  {
 
     public Node() {
         this.outlinks = "";
-        this.pageRank = -1;
-        this.pageRankReceived = -1;
+        this.pageRank = -1.0;
+        this.pageRankReceived = -1.0;
     }
 
     public Node(String outlinks, double pageRank, double pageRankReceived) {

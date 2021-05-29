@@ -59,7 +59,7 @@ public class PageRank {
             if(outlinks_list.length>0){
 
                 for(i=1; i<outlinks_list.length;i++){
-                    node.setPageRankReceived(rank/ outlinks_list.length);
+                    node.setPageRankReceived(rank/ (outlinks_list.length-1));
                     context.write(new Text(outlinks_list[i]),node);
                 }
             }
@@ -92,7 +92,7 @@ public class PageRank {
         @Override
         protected void reduce(Text key, Iterable<Node> values, Context context) throws IOException, InterruptedException {
 
-            child_list = new ArrayList<Node>();
+            child_list = new ArrayList<>();
             for(Node child : values)
                 child_list.add(Node.copy(child));
 
