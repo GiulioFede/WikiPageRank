@@ -92,9 +92,8 @@ public class Node implements Writable,Comparable<Node>  {
     @Override
     public String toString() {
 
-        /*
-                FORMAT:  ###*$* ..*$*...*$*###45###64
-         */
-        return outlinks+"###"+pageRank+"###"+pageRankReceived;
+        return  outlinks +
+                pageRank +
+                CustomPattern.SEPARATOR + pageRankReceived + CustomPattern.SEPARATOR;
     }
 }

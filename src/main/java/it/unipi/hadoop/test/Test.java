@@ -36,11 +36,41 @@ public class Test {
         Node nodo = new Node();
         System.out.println(nodo);*/
         String file_xml = "*$*methylation*$*DNA*$*cancer*$*Genome Research*$*PCR amplification*$*Category:Oncology*$*###0.0###-1.0";
-        String file_xml2 = ("%%%%methylation%%%%%DNA%$$$cancer*$*Genome Research*$*PCR amplification*$*Category:Oncology*$*###0.0###-1.0");
+        String file_xml2 = ("Front des forces d'action pour la république    //SEPARATOR//[[Federation, ::Action for the Republic]][[dfeff]]//SEPARATOR//-1.0//SEPARATOR//-2.0//SEPARATOR//");
+        String file_xml3 = ("Front des forces d'action pour la république    ###//:://###-1.0###-1.0");
 
-        String[] row = file_xml2.split("//:://");
+        Pattern title_pat = Pattern.compile("(.*?)//SEPARATOR//"); //match tutto ciò che inizia con <title> e finisce con <title>, qualsiasi sia il contenuto interno
+        Pattern outlinks_pat = Pattern.compile("\\[\\[(.*?)\\]\\]");
+
+        Matcher title_match = title_pat.matcher(file_xml2);
+
+        if(title_match.find())
+            System.out.println(title_match.group(1));
+
+
+        if(title_match.find())
+                System.out.println(title_match.group(1));
+        /*
+                Matcher outlinks = outlinks_pat.matcher(title_match.group(1));
+                if(outlinks.find())
+                    System.out.println(outlinks.group(1));*/
+        if(title_match.find())
+                System.out.println(title_match.group(1));
+        if(title_match.find())
+                System.out.println(title_match.group(1));
+
+
+
+        /*
+
+        System.out.println(outlinks.length);
         System.out.println(row[0]);
         System.out.println(row[1]);
-        System.out.println(row[2]);
+        System.out.println(outlinks[0]);
+        System.out.println(outlinks[1]);
+        System.out.println(outlinks[2]);
+        */
     }
+
+
 }

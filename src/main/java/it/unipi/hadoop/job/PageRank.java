@@ -2,18 +2,25 @@ package it.unipi.hadoop.job;
 
 import it.unipi.hadoop.dataModel.CustomCounter;
 import it.unipi.hadoop.dataModel.Node;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PageRank {
 
-    public static class PageRankMapper extends Mapper<Text, Text, Text, Node>
+    private static final String SEPARATOR = "//SEPARATOR//";
+    private static final Pattern separator_pat = Pattern.compile("(.*?)//SEPARATOR//");
+
+    public static class PageRankMapper extends Mapper<LongWritable, Text, Text, Node>
     {
         long numberOfPages;
+        String title;
         String outlinks;
         double rank;
         double rankReceived;
@@ -30,12 +37,23 @@ public class PageRank {
         }
 
         @Override
-        protected void map(Text key, Text value, Context context) throws IOException, InterruptedException {
+        protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
-            String[] row = value.toString().split("###");
-            outlinks = row[0];
-            rank = Double.parseDouble(row[1]);
-            rankReceived = Double.parseDouble(row[2]);
+            /*
+                    Tipo di linea ricevuta: titolo ||SEPARATOR||[[link1]][[link2]]...[[linkN]]||SEPARATOR||rank||SEPARATOR||rankReceived||SEPARATOR||
+            */
+
+            //create Node from input
+            Matcher match = separator_pat.matcher(value.toString());
+            if(match.find())
+                title = match.group(1);
+            if(match.find())
+                outlinks = match.group(1);
+            if(match.find())
+                rank = Double.parseDouble(match.group(1));
+            if(match.find())
+                rankReceived = Double.parseDouble(match.group(1));
+
 
             //se è la prima iterazione settiamo il rank come 1/N con N numero di pagine
             if(rank==-1)
@@ -45,7 +63,7 @@ public class PageRank {
 
             node.setOutlinks(outlinks);
             //emetto nodo chiave con le sue informazioni
-            context.write(key,node);
+            //context.write(key,node);
 
             //riutilizzo node per i figli
             node.setOutlinks("");

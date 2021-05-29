@@ -8,6 +8,10 @@ public class CustomPattern {
     private static final Pattern title_pat = Pattern.compile("<title>(.*)</title>");
     private static final Pattern text_pat = Pattern.compile("<text(.*?)</text>");
     private static final Pattern link_pat = Pattern.compile("\\[\\[(.*?)\\]\\]");
+    public static final String SEPARATOR = "//SEPARATOR//";
+    private static final Pattern separator_pat = Pattern.compile("(.*?)//SEPARATOR//");
+
+    //:::::::::::::::::::::::::::::::::: metodi utilizzati dal job 1 :::::::::::::::::::::::::::::::::::::
 
     public static String getTitleContent(String str){
         Matcher title_match = title_pat.matcher(str);
@@ -22,7 +26,7 @@ public class CustomPattern {
 
     public static String getOutlinks(String str){
 
-        String outlinks = "";
+        String outlinks = SEPARATOR;
 
         //retrieve text from str
         Matcher text_match = text_pat.matcher(str);
@@ -33,13 +37,49 @@ public class CustomPattern {
             Matcher outlinks_match = link_pat.matcher(text);
             while(outlinks_match.find()){
                 //here i have one link
-                outlinks+="//:://"+outlinks_match.group(1);
+                outlinks+="[["+outlinks_match.group(1)+"]]";
             }
 
-            outlinks+="//:://";
+            outlinks += SEPARATOR;
         }
 
         return outlinks;
+    }
+
+    //:::::::::::::::::::::::::::::::::::::: metodi utilizzati dal job 2 :::::::::::::::::::::::::::::::
+
+    public static void getTitleOutlinksRankRankReceive(String title,
+                                                       String outlinks
+                                                       ){
+
+    }
+
+    public static String getTargettContent(String str, String target){
+
+        Matcher match = separator_pat.matcher(str);
+        if(match.find()){
+            if(target=="title") return match.group(1);
+            if(match.find()){
+                if(target=="outlinks") return match.group(1);
+                if(match.find()){
+
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static String getOutlinks2(String str){
+
+        Matcher outlink_match = separator_pat.matcher(str);
+        if(outlink_match.find()){
+            if(outlink_match.find()) {
+                return outlink_match.group(1);
+            }
+        }
+
+        return null;
 
     }
 }
