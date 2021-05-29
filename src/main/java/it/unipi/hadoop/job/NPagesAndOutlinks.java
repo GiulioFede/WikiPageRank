@@ -31,7 +31,6 @@ public class NPagesAndOutlinks {
 
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            super.map(key, value, context);
 
             //get line of file
             String line = value.toString();
@@ -43,10 +42,9 @@ public class NPagesAndOutlinks {
                 node.setOutlinks(CustomPattern.getOutlinks(line));
                 context.write(new Text(titlePage), new IntWritable(1));
 
+                //increment number of pages
+                context.getCounter(CustomCounter.NUMBER_OF_PAGES).increment(1);
             }
-
-            //increment number of pages
-            context.getCounter(CustomCounter.NUMBER_OF_PAGES).increment(1);
         }
 
     }
@@ -55,7 +53,6 @@ public class NPagesAndOutlinks {
     {
         @Override
         protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
-            super.reduce(key, values, context);
 
             for(IntWritable val : values)
                 context.write(new Text(key), val);
