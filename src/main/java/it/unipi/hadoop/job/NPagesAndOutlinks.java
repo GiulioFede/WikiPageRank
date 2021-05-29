@@ -20,7 +20,7 @@ public class NPagesAndOutlinks {
 
 
     //::::::::::::::::::::::::::::::::::::::: MAPPER :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    public static class NPagesAndOutlinksMapper extends Mapper<LongWritable, Text, Text, Node>
+    public static class NPagesAndOutlinksMapper extends Mapper<Text, Text, Text, Node>
     {
         Node node;
         @Override
@@ -30,7 +30,7 @@ public class NPagesAndOutlinks {
         }
 
         @Override
-        protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+        protected void map(Text key, Text value, Context context) throws IOException, InterruptedException {
 
             //get line of file
             String line = value.toString();
