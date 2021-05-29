@@ -16,6 +16,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileAsBinaryOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
@@ -65,7 +66,7 @@ public class WikiPageRank
         nPagesAndOutlinks_job.setMapOutputValueClass(Node.class);
 
         nPagesAndOutlinks_job.setInputFormatClass(TextInputFormat.class);
-        nPagesAndOutlinks_job.setOutputFormatClass(SequenceFileOutputFormat.class );
+        nPagesAndOutlinks_job.setOutputFormatClass(SequenceFileAsBinaryOutputFormat.class );
 
         //wait
         boolean success = nPagesAndOutlinks_job.waitForCompletion(true);
