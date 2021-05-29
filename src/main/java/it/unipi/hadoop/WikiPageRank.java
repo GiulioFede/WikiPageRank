@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 import it.unipi.hadoop.dataModel.CustomCounter;
-import it.unipi.hadoop.dataModel.CustomOutputFormat;
 import it.unipi.hadoop.dataModel.Node;
 import it.unipi.hadoop.job.NPagesAndOutlinks;
 import org.apache.hadoop.conf.Configuration;
