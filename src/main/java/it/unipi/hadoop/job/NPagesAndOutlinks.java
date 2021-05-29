@@ -20,7 +20,7 @@ public class NPagesAndOutlinks {
 
 
     //::::::::::::::::::::::::::::::::::::::: MAPPER :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    public static class NPagesAndOutlinksMapper extends Mapper<LongWritable, Text, Text, IntWritable>
+    public static class NPagesAndOutlinksMapper extends Mapper<LongWritable, Text, Text, Node>
     {
         Node node;
         @Override
@@ -40,7 +40,7 @@ public class NPagesAndOutlinks {
 
             if(titlePage!=null){
                 node.setOutlinks(CustomPattern.getOutlinks(line));
-                context.write(new Text(titlePage), new IntWritable(1));
+                context.write(new Text(titlePage), node);
 
                 //increment number of pages
                 context.getCounter(CustomCounter.NUMBER_OF_PAGES).increment(1);

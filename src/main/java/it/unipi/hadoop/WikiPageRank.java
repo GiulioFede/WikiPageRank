@@ -62,7 +62,7 @@ public class WikiPageRank
         //nPagesAndOutlinks_job.setReducerClass(NPagesAndOutlinks.NPagesAndOutlinksReducer.class);
 
         nPagesAndOutlinks_job.setMapOutputKeyClass(Text.class);
-        nPagesAndOutlinks_job.setMapOutputValueClass(IntWritable.class);
+        nPagesAndOutlinks_job.setMapOutputValueClass(Node.class);
         //nPagesAndOutlinks_job.setOutputKeyClass(Text.class);
         //nPagesAndOutlinks_job.setOutputValueClass(IntWritable.class);
 
