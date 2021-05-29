@@ -90,7 +90,7 @@ public class WikiPageRank
         FileInputFormat.addInputPath(computePageRank_job, new Path(output+"/firstJob"));
         FileOutputFormat.setOutputPath(computePageRank_job, new Path(output+"/secondJob"));
 
-        //computePageRank_job.setNumReduceTasks(3);
+        computePageRank_job.setNumReduceTasks(0);
 
         computePageRank_job.setMapperClass(PageRank.PageRankMapper.class);
         computePageRank_job.setReducerClass(PageRank.PageRankReducer.class);
