@@ -63,7 +63,7 @@ public class PageRank {
 
             node.setOutlinks(outlinks);
             //emetto nodo chiave con le sue informazioni
-            //context.write(key,node);
+            context.write(new Text(title),node);
 
             //riutilizzo node per i figli
             node.setOutlinks("");
