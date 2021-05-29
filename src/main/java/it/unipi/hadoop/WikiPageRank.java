@@ -22,9 +22,6 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class WikiPageRank
 {
-
-
-
     /*
             INGRESSO
                 - damping factor: damping factor args[0]

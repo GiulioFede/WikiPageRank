@@ -2,6 +2,7 @@ package it.unipi.hadoop.job;
 
 import it.unipi.hadoop.dataModel.CustomCounter;
 import it.unipi.hadoop.dataModel.Node;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
 public class PageRank {
 
-    public static class PageRankMapper extends Mapper<Text, Text, Text, Node>
+    public static class PageRankMapper extends Mapper<LongWritable, Text, Text, Node>
     {
         long numberOfPages;
         String outlinks;
@@ -30,7 +31,7 @@ public class PageRank {
         }
 
         @Override
-        protected void map(Text key, Text value, Context context) throws IOException, InterruptedException {
+        protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
             String[] row = value.toString().split("###");
             outlinks = row[0];
@@ -45,7 +46,7 @@ public class PageRank {
 
             node.setOutlinks(outlinks);
             //emetto nodo chiave con le sue informazioni
-            context.write(key,node);
+            context.write(new Text(key.toString()),node);
 
             //riutilizzo node per i figli
             node.setOutlinks("");
