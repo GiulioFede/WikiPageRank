@@ -9,6 +9,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class PageRank {
 
@@ -47,8 +48,9 @@ public class PageRank {
             node.setOutlinks(outlinks);
             //emetto nodo chiave con le sue informazioni
             String[] outlinks_list = outlinks.split("//:://");
-            context.write(new Text(outlinks_list[0].toString()),node);
+            //context.write(new Text(outlinks_list[0].toString()),node);
 
+            context.write(new Text(String.valueOf(Math.random())),node);
             //riutilizzo node per i figli
             node.setOutlinks("");
 
