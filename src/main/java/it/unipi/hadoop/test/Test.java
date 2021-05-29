@@ -1,5 +1,7 @@
 package it.unipi.hadoop.test;
 
+import it.unipi.hadoop.dataModel.Node;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,5 +30,9 @@ public class Test {
         }
         else
             System.out.println(title_match.find());
+
+
+        Node nodo = new Node();
+        System.out.println(nodo);
     }
 }

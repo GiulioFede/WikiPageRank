@@ -77,4 +77,5 @@ public class Node implements Writable,Comparable<Node> {
         pageRank = dataInput.readDouble();
         pageRankReceived = dataInput.readDouble();
     }
+
 }

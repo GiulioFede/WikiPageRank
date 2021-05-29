@@ -20,7 +20,7 @@ public class NPagesAndOutlinks {
 
 
     //::::::::::::::::::::::::::::::::::::::: MAPPER :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    public static class NPagesAndOutlinksMapper extends Mapper<LongWritable, Text, Text, Node>
+    public static class NPagesAndOutlinksMapper extends Mapper<LongWritable, Text, Text, Text>
     {
         Node node;
         @Override
@@ -40,7 +40,8 @@ public class NPagesAndOutlinks {
 
             if(titlePage!=null){
                 node.setOutlinks(CustomPattern.getOutlinks(line));
-                context.write(new Text(titlePage), node);
+                //to avoid saving also the default fields of the Node class (thus avoid wasting space on HDFS) we send only the outlinks
+                context.write(new Text(titlePage), new Text(node.getOutlinks()));
 
                 //increment number of pages
                 context.getCounter(CustomCounter.NUMBER_OF_PAGES).increment(1);
