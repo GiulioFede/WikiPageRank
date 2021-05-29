@@ -38,9 +38,13 @@ public class Test {
         String file_xml = "*$*methylation*$*DNA*$*cancer*$*Genome Research*$*PCR amplification*$*Category:Oncology*$*###0.0###-1.0";
         String file_xml2 = ("%%%%methylation%%%%%DNA%$$$cancer*$*Genome Research*$*PCR amplification*$*Category:Oncology*$*###0.0###-1.0");
 
-        String[] row = file_xml2.split("//:://");
+      /*  String[] row = file_xml2.split("//:://");
         System.out.println(row[0]);
         System.out.println(row[1]);
         System.out.println(row[2]);
+        */
+        double ciao= 1;
+        double ciao2 = 2472;
+        System.out.println(1/((double)2472));
     }
 }
