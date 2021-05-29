@@ -79,4 +79,12 @@ public class Node implements Writable,Comparable<Node>  {
         pageRankReceived = dataInput.readDouble();
     }
 
+    @Override
+    public String toString() {
+
+        /*
+                FORMAT:  ###*$* ..*$*...*$*###45###64
+         */
+        return "###"+outlinks+"###"+pageRank+"###"+pageRankReceived;
+    }
 }

@@ -65,7 +65,7 @@ public class WikiPageRank
         nPagesAndOutlinks_job.setMapOutputValueClass(Node.class);
 
         nPagesAndOutlinks_job.setInputFormatClass(TextInputFormat.class);
-        nPagesAndOutlinks_job.setOutputFormatClass(SequenceFileOutputFormat.class);
+        nPagesAndOutlinks_job.setOutputFormatClass(TextOutputFormat.class);
 
         //wait
         boolean success = nPagesAndOutlinks_job.waitForCompletion(true);
