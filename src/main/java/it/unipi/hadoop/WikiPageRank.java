@@ -47,20 +47,22 @@ public class WikiPageRank
 
         //::::::::::::::::::::::::::::::first JOB: compute number of pages and outlinks:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        Job nPagesAndOutlinks_job = new Job();
+        Job nPagesAndOutlinks_job = Job.getInstance(conf);
         nPagesAndOutlinks_job.setJarByClass(WikiPageRank.class);
         nPagesAndOutlinks_job.setJobName("Compute number of pages and outlinks ");
 
         FileInputFormat.addInputPath(nPagesAndOutlinks_job, input);
         FileOutputFormat.setOutputPath(nPagesAndOutlinks_job, output);
 
-        nPagesAndOutlinks_job.setNumReduceTasks(0);
+        nPagesAndOutlinks_job.setNumReduceTasks(1);
 
         nPagesAndOutlinks_job.setMapperClass(NPagesAndOutlinks.NPagesAndOutlinksMapper.class);
-        //nPagesAndOutlinks_job.setReducerClass(NPagesAndOutlinks.NPagesAndOutlinksReducer.class);
+        nPagesAndOutlinks_job.setReducerClass(NPagesAndOutlinks.NPagesAndOutlinksReducer.class);
 
         nPagesAndOutlinks_job.setMapOutputKeyClass(Text.class);
         nPagesAndOutlinks_job.setMapOutputValueClass(IntWritable.class);
+        nPagesAndOutlinks_job.setOutputKeyClass(Text.class);
+        nPagesAndOutlinks_job.setOutputValueClass(IntWritable.class);
 
 
 
