@@ -62,6 +62,7 @@ public class Test {
         String s = " ciao sono x ";
         System.out.println(s.length());
         System.out.println(s.trim().length());
+        double c = 192.3;
 
 
 /*
