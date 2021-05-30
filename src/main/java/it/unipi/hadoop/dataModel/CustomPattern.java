@@ -37,7 +37,7 @@ public class CustomPattern {
             Matcher outlinks_match = link_pat.matcher(text);
             while(outlinks_match.find()){
                 //here i have one link
-                outlinks+="[["+outlinks_match.group(1)+"]]";
+                outlinks += "[["+outlinks_match.group(1)+"]]";
             }
         }
 
@@ -70,16 +70,4 @@ public class CustomPattern {
         return null;
     }
 
-    public static String getOutlinks2(String str){
-
-        Matcher outlink_match = separator_pat.matcher(str);
-        if(outlink_match.find()){
-            if(outlink_match.find()) {
-                return outlink_match.group(1);
-            }
-        }
-
-        return null;
-
-    }
 }

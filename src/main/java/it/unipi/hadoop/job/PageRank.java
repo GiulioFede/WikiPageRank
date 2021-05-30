@@ -16,7 +16,8 @@ public class PageRank {
 
     private static final String SEPARATOR = "//SEPARATOR//";
     private static final Pattern separator_pat = Pattern.compile("(.*?)"+SEPARATOR);
-    private static final Pattern outlinks_pat = Pattern.compile("\\[\\[(.*?)\\]\\]");
+    private static final Pattern internal_outlinks_pat = Pattern.compile("\\[\\[(.*?)\\]\\]");
+    private static final Pattern outlinks_pat2 = Pattern.compile(SEPARATOR+"(.*?)"+SEPARATOR);
 
     public static class PageRankMapper extends Mapper<LongWritable, Text, Text, Node>
     {
@@ -24,7 +25,6 @@ public class PageRank {
         String title;
         String outlinks;
         double rank;
-        double rankReceived;
         Node node;
         int i;
 
@@ -48,10 +48,13 @@ public class PageRank {
 
             //create Node from input
             Matcher match = separator_pat.matcher(value.toString());
-            if(match.find())
+            Matcher outlinks_match = outlinks_pat2.matcher(value.toString());
+            if(match.find()) {
                 title = match.group(1);
-            if(match.find())
-                outlinks = match.group(1);
+                match.find();
+            }
+            if(outlinks_match.find())
+                outlinks = outlinks_match.group(1);
             if(match.find())
                 rank = Double.parseDouble(match.group(1));
 
@@ -70,7 +73,22 @@ public class PageRank {
             //riutilizzo node per i figli
             node.setOutlinks("");
 
+            //se esistono outlinks...
+            if(outlinks.compareTo("")!=0){
+                //qui li avremo in questa forma --> [[link1]][[link2]]...[[linkN]]
+                Matcher internal_outlinks = internal_outlinks_pat.matcher(outlinks);
+                Matcher internal_outlinks_count = internal_outlinks_pat.matcher(outlinks);
 
+                //count number of outlinks
+                i = 0;
+                while (internal_outlinks_count.find()) i++;
+                while (internal_outlinks.find()){
+                    node.setPageRankReceived((rank/ i));
+                    context.write(new Text(internal_outlinks.group(1)),node);
+                }
+            }
+
+/*
             Matcher outlinks_match = outlinks_pat.matcher(outlinks);
             Matcher outlinks_count = outlinks_pat.matcher(outlinks);
 
@@ -82,6 +100,8 @@ public class PageRank {
                 node.setPageRankReceived((rank/ i));
                 context.write(new Text(outlinks_match.group(1)),node);
             }
+
+ */
 
         }
     }
