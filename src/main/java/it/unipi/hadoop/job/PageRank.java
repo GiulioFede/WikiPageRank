@@ -110,7 +110,7 @@ public class PageRank {
     {
 
         Node node;
-        int sum;
+        double sum;
         ArrayList<Node> child_list;
         int i;
         static double dampingFactor;
@@ -152,7 +152,7 @@ public class PageRank {
 
             for(i=0; i<child_list.size(); i++){
                 //se è un nodo che riporta le informazioni
-                if(child_list.get(i).getPageRankReceived()==-1.0)
+                if(child_list.get(i).getPageRankReceived()==-1)
                     node = child_list.get(i);
                 else
                     sum+=child_list.get(i).getPageRankReceived();
