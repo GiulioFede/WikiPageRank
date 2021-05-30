@@ -85,7 +85,7 @@ public class WikiPageRank
 
         conf.set("damping_factor",String.valueOf(dampingFactor));
 
-        for(int i=0; i<2; i++) {
+        for(int i=0; i<4; i++) {
 
             Job computePageRank_job = Job.getInstance(conf);
             computePageRank_job.setJarByClass(WikiPageRank.class);

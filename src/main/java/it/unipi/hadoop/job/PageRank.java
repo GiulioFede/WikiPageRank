@@ -142,13 +142,13 @@ public class PageRank {
             newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
             node.setPageRank(newPageRank);
 
-            context.write(key,node);
-/*
+         //   context.write(key,node);
+
             //da eliminare
             node2.setPageRank(node.getPageRank());
             context.write(key, node2);
 
- */
+
 
         }
 
