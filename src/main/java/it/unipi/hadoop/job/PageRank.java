@@ -70,7 +70,7 @@ public class PageRank {
             node.setPageRankReceived(-1);
             node.setOutlinks(outlinks);
             //emetto nodo chiave con le sue informazioni
-            context.write(new Text(title),node);
+            context.write(new Text(title.trim()),node);
 
             //riutilizzo node per i figli
             node.setOutlinks("");
@@ -86,7 +86,7 @@ public class PageRank {
                 while (internal_outlinks_count.find()) i++;
                 while (internal_outlinks.find()){
                     node.setPageRankReceived((rank/ i));
-                    context.write(new Text(internal_outlinks.group(1)),node);
+                    context.write(new Text(internal_outlinks.group(1).trim()),node);
                 }
             }
 

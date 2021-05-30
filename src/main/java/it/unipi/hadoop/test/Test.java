@@ -59,11 +59,10 @@ public class Test {
             System.out.println(node.toString());
 
 */
-        double x = -1;
-        if(x == -1)
-            System.out.println("yes");
-        else
-            System.out.println("no");
+        String s = " ciao sono x ";
+        System.out.println(s.length());
+        System.out.println(s.trim().length());
+
 
 /*
         String SEPARATOR = "//SEPARATOR//";
