@@ -53,8 +53,7 @@ public class PageRank {
                 outlinks = match.group(1);
             if(match.find())
                 rank = Double.parseDouble(match.group(1));
-            if(match.find())
-                rankReceived = Double.parseDouble(match.group(1));
+
 
 
             //se è la prima iterazione settiamo il rank come 1/N con N numero di pagine
@@ -62,7 +61,7 @@ public class PageRank {
                 rank = (1/((double)(numberOfPages)));
 
             node.setPageRank(rank);
-
+            node.setPageRankReceived(-1);
             node.setOutlinks(outlinks);
             //emetto nodo chiave con le sue informazioni
             context.write(new Text(title),node);
