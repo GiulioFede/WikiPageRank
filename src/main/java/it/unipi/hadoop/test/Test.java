@@ -32,36 +32,22 @@ public class Test {
         else
             System.out.println(title_match.find());
 
+*/
+        String value = ("Category:2004 in Hong Kong and Macau    //SEPARATOR//[[Category:Years in Hong Kong and Macau]][[Category:2004 by country|Hong]]//SEPARATOR//-1.0//SEPARATOR//-1.0//SEPARATOR//");
 
-        Node nodo = new Node();
-        System.out.println(nodo);*/
-        String file_xml = "*$*methylation*$*DNA*$*cancer*$*Genome Research*$*PCR amplification*$*Category:Oncology*$*###0.0###-1.0";
-        String file_xml2 = ("Front des forces d'action pour la république    //SEPARATOR//[[Federation, ::Action for the Republic]][[dfeff]]//SEPARATOR//-1.0//SEPARATOR//-2.0//SEPARATOR//");
-        String file_xml3 = ("Front des forces d'action pour la république    ###//:://###-1.0###-1.0");
-
-        Pattern title_pat = Pattern.compile("(.*?)//SEPARATOR//"); //match tutto ciò che inizia con <title> e finisce con <title>, qualsiasi sia il contenuto interno
+        String SEPARATOR = "//SEPARATOR//";
+        Pattern separator_pat = Pattern.compile("(.*?)"+SEPARATOR);
         Pattern outlinks_pat = Pattern.compile("\\[\\[(.*?)\\]\\]");
 
-        Matcher title_match = title_pat.matcher(file_xml2);
-
-        if(title_match.find())
-            System.out.println(title_match.group(1));
-
-
-        if(title_match.find())
-                System.out.println(title_match.group(1));
-
-                Matcher outlinks = outlinks_pat.matcher(title_match.group(1));
-                int c = outlinks.groupCount();
-                System.out.println(c);
-                while(outlinks.find())
-                    System.out.println(outlinks.group(1));/*
-        if(title_match.find())
-                System.out.println(title_match.group(1));
-        if(title_match.find())
-                System.out.println(title_match.group(1));
-                */
-
+        Matcher match = separator_pat.matcher(value.toString());
+        if(match.find())
+            System.out.println(match.group(1));
+        if(match.find())
+            System.out.println(match.group(1));
+        if(match.find())
+            System.out.println(Double.parseDouble(match.group(1)));
+        if(match.find())
+            System.out.println(Double.parseDouble(match.group(1)));
 
 
         /*

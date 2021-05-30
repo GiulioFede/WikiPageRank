@@ -40,6 +40,7 @@ public class PageRank {
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
+            context.getCounter(CustomCounter.ULTIMO_MAP).increment(1);
             /*
                     Tipo di linea ricevuta: titolo ||SEPARATOR||[[link1]][[link2]]...[[linkN]]||SEPARATOR||rank||SEPARATOR||rankReceived||SEPARATOR||
             */
@@ -109,7 +110,7 @@ public class PageRank {
 
         @Override
         protected void reduce(Text key, Iterable<Node> values, Context context) throws IOException, InterruptedException {
-
+            context.getCounter(CustomCounter.UTLIMO_REDUCE).increment(1);
             child_list = new ArrayList<Node>();
             for(Node child : values)
                 child_list.add(Node.copy(child));
