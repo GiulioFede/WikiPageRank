@@ -49,7 +49,8 @@ public class Test {
         if(match.find())
             System.out.println(Double.parseDouble(match.group(1)));
 
-
+        double rank = (1/((double)(2427)));
+        System.out.println(rank);
         /*
 
         System.out.println(outlinks.length);

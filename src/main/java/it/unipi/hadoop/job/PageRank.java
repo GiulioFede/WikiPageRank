@@ -59,7 +59,7 @@ public class PageRank {
 
             //se è la prima iterazione settiamo il rank come 1/N con N numero di pagine
             if(rank==-1)
-                rank = 1/numberOfPages;
+                rank = (1/((double)(numberOfPages)));
 
             node.setPageRank(rank);
 
