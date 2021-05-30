@@ -135,10 +135,10 @@ public class PageRank {
                 else
                     sum+=child_list.get(i).getPageRankReceived();
 
+                if(key.toString().compareTo("Wikipedia:Deletion review|deletion review")==0)
+                    context.getCounter(CustomCounter.SUM).increment((long)child_list.get(i).getPageRankReceived());
             }
 
-            if(key.toString().compareTo("Wikipedia:Deletion review|deletion review")==0)
-                context.getCounter(CustomCounter.SUM).increment(child_list.size());
 
             //calcolo nuovo page rank
             newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
