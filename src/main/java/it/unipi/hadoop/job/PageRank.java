@@ -88,21 +88,6 @@ public class PageRank {
                 }
             }
 
-/*
-            Matcher outlinks_match = outlinks_pat.matcher(outlinks);
-            Matcher outlinks_count = outlinks_pat.matcher(outlinks);
-
-            i = 0;
-            while(outlinks_count.find())
-                i++;
-
-            while(outlinks_match.find()){
-                node.setPageRankReceived((rank/ i));
-                context.write(new Text(outlinks_match.group(1)),node);
-            }
-
- */
-
         }
     }
 
@@ -138,17 +123,6 @@ public class PageRank {
             for(Node child : values)
                 child_list.add(Node.copy(child));
 
-            if(child_list.size()>1)
-                context.getCounter(CustomCounter.NUMBER_OF_CHILD).increment(child_list.size());
-
-     /*       context.write(key,new Node());
-            //da eliminare
-            for(i=0; i<child_list.size();i++){
-
-                context.write(key,child_list.get(i));
-            }*/
-
-
 
             for(i=0; i<child_list.size(); i++){
                 //se è un nodo che riporta le informazioni
@@ -157,10 +131,8 @@ public class PageRank {
                 else
                     sum+=child_list.get(i).getPageRankReceived();
 
-                context.getCounter(CustomCounter.SUM).increment((long)child_list.get(i).getPageRankReceived());
             }
 
-            //context.getCounter(CustomCounter.SUM).increment(sum);
             //calcolo nuovo page rank
             newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
             node.setPageRank(newPageRank);

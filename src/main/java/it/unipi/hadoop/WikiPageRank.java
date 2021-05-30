@@ -85,128 +85,43 @@ public class WikiPageRank
 
         conf.set("damping_factor",String.valueOf(dampingFactor));
 
-        Job computePageRank_job = Job.getInstance(conf);
-        computePageRank_job.setJarByClass(WikiPageRank.class);
-        computePageRank_job.setJobName("Compute page rank ");
+        for(int i=0; i<2; i++) {
 
-        //as input take previous result
-        FileInputFormat.addInputPath(computePageRank_job, new Path(output+"/firstJob"));
-        FileOutputFormat.setOutputPath(computePageRank_job, new Path(output+"/secondJob"));
+            Job computePageRank_job = Job.getInstance(conf);
+            computePageRank_job.setJarByClass(WikiPageRank.class);
+            computePageRank_job.setJobName("Compute page rank ");
 
-        computePageRank_job.setNumReduceTasks(1);
+            //as input take previous result
+            if(i==0)
+                FileInputFormat.addInputPath(computePageRank_job, new Path(output + "/firstJob"));
+            else
+                FileInputFormat.addInputPath(computePageRank_job, new Path(output + "/secondJob_"+(i-1)));
 
-        computePageRank_job.setMapperClass(PageRank.PageRankMapper.class);
-        computePageRank_job.setReducerClass(PageRank.PageRankReducer.class);
+            FileOutputFormat.setOutputPath(computePageRank_job, new Path(output + "/secondJob_"+i));
 
-        computePageRank_job.setMapOutputKeyClass(Text.class);
-        computePageRank_job.setMapOutputValueClass(Node.class);
-        computePageRank_job.setOutputKeyClass(Text.class);
-        computePageRank_job.setOutputValueClass(Node.class);
+            computePageRank_job.setNumReduceTasks(1);
 
-        computePageRank_job.setInputFormatClass(TextInputFormat.class);
-        computePageRank_job.setOutputFormatClass(TextOutputFormat.class);
+            computePageRank_job.setMapperClass(PageRank.PageRankMapper.class);
+            computePageRank_job.setReducerClass(PageRank.PageRankReducer.class);
 
-        //wait
-        success = computePageRank_job.waitForCompletion(true);
-        if(success)
-            System.out.println("Lavoro completato");
-        else {
-            System.out.println("Lavoro fallito: non è stato possibile calcolare il page rank");
-            System.exit(0);
+            computePageRank_job.setMapOutputKeyClass(Text.class);
+            computePageRank_job.setMapOutputValueClass(Node.class);
+            computePageRank_job.setOutputKeyClass(Text.class);
+            computePageRank_job.setOutputValueClass(Node.class);
+
+            computePageRank_job.setInputFormatClass(TextInputFormat.class);
+            computePageRank_job.setOutputFormatClass(TextOutputFormat.class);
+
+            //wait
+            success = computePageRank_job.waitForCompletion(true);
+            if (success)
+                System.out.println("Lavoro completato");
+            else {
+                System.out.println("Lavoro fallito: non è stato possibile calcolare il page rank");
+                System.exit(0);
+            }
+
         }
-
-
-
-
-
-
-        /*
-
-        // set number of iterations
-        int iterations = Integer.parseInt(otherArgs[0]);
-
-        FileSystem fs = FileSystem.get(output.toUri(),conf);
-        if (fs.exists(output)) {
-            System.out.println("Delete old output folder: " + output);
-            fs.delete(output, true);
-        }
-
-        fs = FileSystem.get(new Path(output.toString()+"_initial_ranked").toUri(),conf);
-        if (fs.exists(new Path(output.toString()+"_initial_ranked"))) {
-            System.out.println("Delete old output folder: " + output.toString()+"_initial_ranked");
-            fs.delete(new Path(output.toString()+"_initial_ranked"), true);
-        }
-
-        for (int i = 0; i < iterations; i++) {
-
-            System.out.println("Iteration: " + i);
-            Job countPages = Job.getInstance(conf, "CountPages");
-            countPages.setJarByClass(PageRank.class);
-
-            //se dobbiamo passare qualche altro parametro
-            //job.getConfiguration().setInt("", );
-
-            // set mapper/combiner/reducer
-            countPages.setMapperClass(CountPagesMapper.class);
-            countPages.setCombinerClass(CountPagesReducer.class);
-            //job.setPartitionerClass(PageRankPartitioner.class);
-            countPages.setReducerClass(CountPagesReducer.class);
-
-            //Da decidere
-            countPages.setNumReduceTasks(3);
-
-            // define mapper's output key-value
-            countPages.setMapOutputKeyClass(Text.class);
-            countPages.setMapOutputValueClass(IntWritable.class);
-
-            // define reducer's output key-value
-            countPages.setOutputKeyClass(Text.class);
-            countPages.setOutputValueClass(LongWritable.class);
-
-            // define I/O
-            FileInputFormat.addInputPath(countPages, input);
-            FileOutputFormat.setOutputPath(countPages, output);
-
-            countPages.setInputFormatClass(TextInputFormat.class);
-            countPages.setOutputFormatClass(TextOutputFormat.class);
-
-            countPages.waitForCompletion(true);
-
-            long total_pages = countPages.getCounters().findCounter("totalpages_in_wiki", "totalpages_in_wiki").getValue();
-            System.out.println("Pages: " + total_pages);
-
-            conf.set("totalpages_in_wiki", String.valueOf(total_pages));
-
-            Job initialRank = Job.getInstance(conf, "InitialRank");
-            initialRank.setJarByClass(PageRank.class);
-
-            initialRank.setMapperClass(InitialRankMapper.class);
-            initialRank.setCombinerClass(InitialRankReducer.class);
-            initialRank.setReducerClass(InitialRankReducer.class);
-
-            initialRank.setNumReduceTasks(3);
-
-            // define mapper's output key-value
-            initialRank.setMapOutputKeyClass(Text.class);
-            initialRank.setMapOutputValueClass(Text.class);
-
-            // define reducer's output key-value
-            initialRank.setOutputKeyClass(Text.class);
-            initialRank.setOutputValueClass(Text.class);
-
-            // define I/O
-            FileInputFormat.addInputPath(initialRank, input);
-            FileOutputFormat.setOutputPath(initialRank, new Path(output + "_initial_ranked"));
-
-            initialRank.setInputFormatClass(TextInputFormat.class);
-            initialRank.setOutputFormatClass(TextOutputFormat.class);
-
-            initialRank.waitForCompletion(true);
-
-            //Non ho capito perchè
-            fs.delete(output, true);
-*/
-        System.out.println(":::::::::::::::::::::::::::::::::::::::NUMERO DI PAGINE: "+nPagesAndOutlinks_job.getCounters().findCounter(CustomCounter.NUMBER_OF_PAGES).getValue());
 
         System.exit(1);
 
