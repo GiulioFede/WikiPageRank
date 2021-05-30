@@ -135,7 +135,7 @@ public class WikiPageRank
 
 
         //as input take last result of second job
-        FileInputFormat.addInputPath(computeSort_job, new Path(output + "/secondJob_"+(i)));
+        FileInputFormat.addInputPath(computeSort_job, new Path(output + "/secondJob_"+(i-1)));
         FileOutputFormat.setOutputPath(computeSort_job, new Path(output + "/finalPageRank"));
 
         computeSort_job.setNumReduceTasks(1);
