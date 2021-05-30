@@ -122,6 +122,7 @@ public class PageRank {
             context.getCounter(CustomCounter.UTLIMO_REDUCE).increment(1);
 
             sum = 0;
+            node = new Node();
 
             child_list = new ArrayList<Node>();
             for(Node child : values)
