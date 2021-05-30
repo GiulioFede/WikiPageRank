@@ -34,6 +34,7 @@ public class PageRank {
 
             numberOfPages = Integer.parseInt(context.getConfiguration().get("number_of_pages"));
             node = new Node();
+
             i = 0;
         }
 
@@ -78,7 +79,7 @@ public class PageRank {
                 i++;
 
             while(outlinks_match.find()){
-                node.setPageRankReceived(rank/ i);
+                node.setPageRankReceived((rank/ i));
                 context.write(new Text(outlinks_match.group(1)),node);
             }
 
@@ -122,8 +123,9 @@ public class PageRank {
                     sum+=child_list.get(i).getPageRankReceived();
             }
 
+            context.getCounter(CustomCounter.SUM).increment(sum);
             //calcolo nuovo page rank
-            newPageRank = dampingFactor*(1/numberOfPages) + (1-dampingFactor)*sum;
+            newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
             node.setPageRank(newPageRank);
 
             context.write(key,node);
