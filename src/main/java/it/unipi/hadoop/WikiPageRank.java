@@ -119,7 +119,7 @@ public class WikiPageRank
             //wait
             success = computePageRank_job.waitForCompletion(true);
             if (success)
-                System.out.println("Lavoro completato");
+                System.out.println("Lavoro "+(i+1)+" completato");
             else {
                 System.out.println("Lavoro fallito: non è stato possibile calcolare il page rank");
                 System.exit(0);

@@ -33,8 +33,7 @@ public class PageRank {
         protected void setup(Context context) throws IOException, InterruptedException {
             super.setup(context);
 
-            //numberOfPages = Integer.parseInt(context.getConfiguration().get("number_of_pages"));
-            numberOfPages = 2;
+            numberOfPages = Integer.parseInt(context.getConfiguration().get("number_of_pages"));
             node = new Node();
 
             i = 0;
