@@ -39,9 +39,9 @@ public class CustomPattern {
                 //here i have one link
                 outlinks+="[["+outlinks_match.group(1)+"]]";
             }
-
-            outlinks += SEPARATOR;
         }
+
+        outlinks += SEPARATOR;
 
         return outlinks;
     }
