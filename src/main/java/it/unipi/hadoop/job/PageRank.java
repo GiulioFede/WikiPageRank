@@ -2,6 +2,7 @@ package it.unipi.hadoop.job;
 
 import it.unipi.hadoop.dataModel.CustomCounter;
 import it.unipi.hadoop.dataModel.Node;
+import it.unipi.hadoop.dataModel.Node2;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -113,6 +114,9 @@ public class PageRank {
             numberOfPages = Integer.parseInt(context.getConfiguration().get("number_of_pages"));
         }
 
+        //da eliminare
+        Node2 node2 = new Node2();
+
         @Override
         protected void reduce(Text key, Iterable<Node> values, Context context) throws IOException, InterruptedException {
             context.getCounter(CustomCounter.UTLIMO_REDUCE).increment(1);
@@ -137,7 +141,11 @@ public class PageRank {
             newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
             node.setPageRank(newPageRank);
 
-            context.write(key,node);
+           // context.write(key,node);
+
+            //da eliminare
+            node2.setPageRank(node.getPageRank());
+            context.write(key, node2);
 
         }
 
