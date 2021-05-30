@@ -39,7 +39,7 @@ public class NPagesAndOutlinks {
             String titlePage = CustomPattern.getTitleContent(line);
 
             if(titlePage!=null){
-                node.setOutlinks(CustomPattern.getOutlinks(line));
+                node.setOutlinks(CustomPattern.getOutlinks(line,titlePage));
                 //to avoid saving also the default fields of the Node class (thus avoid wasting space on HDFS) we send only the outlinks
                 context.write(new Text(titlePage.trim()), node);
 

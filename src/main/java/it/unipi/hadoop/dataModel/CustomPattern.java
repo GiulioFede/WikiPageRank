@@ -24,7 +24,7 @@ public class CustomPattern {
             return null;
     }
 
-    public static String getOutlinks(String str){
+    public static String getOutlinks(String str, String title){
 
         //String outlinks = SEPARATOR;
         String outlinks = "";
@@ -37,7 +37,7 @@ public class CustomPattern {
             //retrieve all the outlinks
             Matcher outlinks_match = link_pat.matcher(text);
             while(outlinks_match.find()){
-                if(!outlinks.contains(outlinks_match.group(1)))
+                if(!outlinks.contains(outlinks_match.group(1)) && outlinks_match.group(1).compareTo(title)!=0)
                     //here i have one link
                     outlinks += "[["+outlinks_match.group(1)+"]]";
             }
