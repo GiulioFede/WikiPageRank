@@ -138,7 +138,8 @@ public class PageRank {
             for(Node child : values)
                 child_list.add(Node.copy(child));
 
-            context.getCounter(CustomCounter.NUMBER_OF_CHILD).increment(child_list.size());
+            if(child_list.size()>1)
+                context.getCounter(CustomCounter.NUMBER_OF_CHILD).increment(child_list.size());
 
             for(i=0; i<child_list.size(); i++){
                 //se è un nodo che riporta le informazioni
