@@ -34,7 +34,6 @@ public class RankSort {
 
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            super.map(key, value, context);
 
             /*
                     Tipo di linea ricevuta: titolo ||SEPARATOR||[[link1]][[link2]]...[[linkN]]||SEPARATOR||rank||SEPARATOR||rankReceived||SEPARATOR||
@@ -42,7 +41,6 @@ public class RankSort {
 
             //create Node from input
             Matcher match = separator_pat.matcher(value.toString());
-            Matcher outlinks_match = outlinks_pat2.matcher(value.toString());
             if(match.find()) {
                 title = match.group(1);
                 match.find();

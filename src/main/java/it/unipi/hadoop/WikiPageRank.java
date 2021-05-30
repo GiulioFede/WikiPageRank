@@ -156,7 +156,7 @@ public class WikiPageRank
         if (success)
             System.out.println("Lavoro completato: sorting terminato");
         else {
-            System.out.println("Lavoro fallito: non è stato possibile calcolare il page rank");
+            System.out.println("Lavoro fallito: non è stato possibile calcolare il sorting");
             System.exit(0);
         }
 
