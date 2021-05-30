@@ -50,7 +50,8 @@ public class Test {
             System.out.println(Double.parseDouble(match.group(1)));
 
         double rank = (1/((double)(2427)));
-        System.out.println(rank);
+        //double rankReceived =
+        System.out.println(rank/4);
         /*
 
         System.out.println(outlinks.length);
