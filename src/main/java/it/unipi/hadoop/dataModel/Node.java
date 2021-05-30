@@ -92,7 +92,7 @@ public class Node implements Writable,Comparable<Node>  {
     @Override
     public String toString() {
 
-        return  outlinks +
+        return  CustomPattern.SEPARATOR + outlinks + CustomPattern.SEPARATOR +
                 pageRank +
                 CustomPattern.SEPARATOR + pageRankReceived + CustomPattern.SEPARATOR;
     }

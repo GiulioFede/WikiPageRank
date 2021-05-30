@@ -26,7 +26,8 @@ public class CustomPattern {
 
     public static String getOutlinks(String str){
 
-        String outlinks = SEPARATOR;
+        //String outlinks = SEPARATOR;
+        String outlinks = "";
 
         //retrieve text from str
         Matcher text_match = text_pat.matcher(str);
@@ -41,7 +42,7 @@ public class CustomPattern {
             }
         }
 
-        outlinks += SEPARATOR;
+        //outlinks += SEPARATOR;
 
         return outlinks;
     }
