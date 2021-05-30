@@ -137,6 +137,9 @@ public class PageRank {
 
             }
 
+            if(key.toString().compareTo("Wikipedia:Deletion review|deletion review")==0)
+                context.getCounter(CustomCounter.SUM).increment(child_list.size());
+
             //calcolo nuovo page rank
             newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
             node.setPageRank(newPageRank);
