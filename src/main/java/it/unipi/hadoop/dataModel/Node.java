@@ -76,7 +76,7 @@ public class Node implements Writable,Comparable<Node>  {
     @Override
     public void write(DataOutput dataOutput) throws IOException {
 
-        dataOutput.writeChars(outlinks);
+        dataOutput.writeUTF(outlinks);
         dataOutput.writeDouble(pageRank);
         dataOutput.writeDouble(pageRankReceived);
     }
@@ -84,7 +84,7 @@ public class Node implements Writable,Comparable<Node>  {
     @Override
     public void readFields(DataInput dataInput) throws IOException {
 
-        outlinks = dataInput.readLine();
+        outlinks = dataInput.readUTF();
         pageRank = dataInput.readDouble();
         pageRankReceived = dataInput.readDouble();
     }
