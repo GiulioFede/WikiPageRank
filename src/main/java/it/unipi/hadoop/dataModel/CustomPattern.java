@@ -37,8 +37,9 @@ public class CustomPattern {
             //retrieve all the outlinks
             Matcher outlinks_match = link_pat.matcher(text);
             while(outlinks_match.find()){
-                //here i have one link
-                outlinks += "[["+outlinks_match.group(1)+"]]";
+                if(!outlinks.contains(outlinks_match.group(1)))
+                    //here i have one link
+                    outlinks += "[["+outlinks_match.group(1)+"]]";
             }
         }
 
