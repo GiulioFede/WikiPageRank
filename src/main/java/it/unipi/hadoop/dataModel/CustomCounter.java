@@ -5,5 +5,6 @@ public enum CustomCounter {
     NUMBER_OF_RANK_ITERATIONS,
     ULTIMO_MAP,
     UTLIMO_REDUCE,
-    SUM
+    SUM,
+    NUMBER_OF_CHILD
 }

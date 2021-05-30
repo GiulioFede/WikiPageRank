@@ -111,9 +111,14 @@ public class PageRank {
         @Override
         protected void reduce(Text key, Iterable<Node> values, Context context) throws IOException, InterruptedException {
             context.getCounter(CustomCounter.UTLIMO_REDUCE).increment(1);
+
+            sum = 0;
+
             child_list = new ArrayList<Node>();
             for(Node child : values)
                 child_list.add(Node.copy(child));
+
+            context.getCounter(CustomCounter.NUMBER_OF_CHILD).increment(child_list.size());
 
             for(i=0; i<child_list.size(); i++){
                 //se è un nodo che riporta le informazioni

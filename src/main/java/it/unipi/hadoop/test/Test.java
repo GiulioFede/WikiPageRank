@@ -51,7 +51,7 @@ public class Test {
 
         double rank = (1/((double)(2427)));
         //double rankReceived =
-        System.out.println(rank/4);
+        System.out.println(rank*0.85);
         /*
 
         System.out.println(outlinks.length);
