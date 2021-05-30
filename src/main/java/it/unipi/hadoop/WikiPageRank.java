@@ -7,8 +7,10 @@ import it.unipi.hadoop.dataModel.CustomCounter;
 import it.unipi.hadoop.dataModel.Node;
 import it.unipi.hadoop.job.NPagesAndOutlinks;
 import it.unipi.hadoop.job.PageRank;
+import it.unipi.hadoop.job.RankSort;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -85,11 +87,13 @@ public class WikiPageRank
 
         conf.set("damping_factor",String.valueOf(dampingFactor));
 
-        for(int i=0; i<4; i++) {
+        int i = 0;
+        for(i=0; i<2; i++) {
 
             Job computePageRank_job = Job.getInstance(conf);
             computePageRank_job.setJarByClass(WikiPageRank.class);
             computePageRank_job.setJobName("Compute page rank ");
+
 
             //as input take previous result
             if(i==0)
@@ -121,6 +125,39 @@ public class WikiPageRank
                 System.exit(0);
             }
 
+        }
+
+        //:::::::::::::::::::::::::::::::::: third job: compute sorting ::::::::::::::::::::::::::::::::::::::::::::::::
+
+        Job computeSort_job = Job.getInstance(conf);
+        computeSort_job.setJarByClass(WikiPageRank.class);
+        computeSort_job.setJobName("Compute sorting ");
+
+
+        //as input take last result of second job
+        FileInputFormat.addInputPath(computeSort_job, new Path(output + "/secondJob_"+(i)));
+        FileOutputFormat.setOutputPath(computeSort_job, new Path(output + "/finalPageRank"));
+
+        computeSort_job.setNumReduceTasks(1);
+
+        computeSort_job.setMapperClass(RankSort.RankSortMapper.class);
+        computeSort_job.setReducerClass(RankSort.RankSortReducer.class);
+
+        computeSort_job.setMapOutputKeyClass(DoubleWritable.class);
+        computeSort_job.setMapOutputValueClass(Text.class);
+        computeSort_job.setOutputKeyClass(Text.class);
+        computeSort_job.setOutputValueClass(DoubleWritable.class);
+
+        computeSort_job.setInputFormatClass(TextInputFormat.class);
+        computeSort_job.setOutputFormatClass(TextOutputFormat.class);
+
+        //wait
+        success = computeSort_job.waitForCompletion(true);
+        if (success)
+            System.out.println("Lavoro completato: sorting terminato");
+        else {
+            System.out.println("Lavoro fallito: non è stato possibile calcolare il page rank");
+            System.exit(0);
         }
 
         System.exit(1);
