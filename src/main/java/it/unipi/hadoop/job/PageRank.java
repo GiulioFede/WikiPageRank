@@ -140,20 +140,20 @@ public class PageRank {
 
             if(child_list.size()>1)
                 context.getCounter(CustomCounter.NUMBER_OF_CHILD).increment(child_list.size());
-
+/*
             context.write(key,new Node());
             //da eliminare
             for(i=0; i<child_list.size();i++){
 
                 context.write(key,child_list.get(i));
-            }
+            }*/
 
-            /*
+
 
             for(i=0; i<child_list.size(); i++){
                 //se è un nodo che riporta le informazioni
                 if(child_list.get(i).getPageRankReceived()==-1)
-                    node = child_list.get(i);
+                    node = Node.copy(child_list.get(i));
                 else
                     sum+=child_list.get(i).getPageRankReceived();
 
@@ -165,7 +165,7 @@ public class PageRank {
             newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
             node.setPageRank(newPageRank);
 
-            context.write(key,node);*/
+            context.write(key,node);
 
         }
 
