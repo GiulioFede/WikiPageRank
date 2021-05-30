@@ -140,8 +140,8 @@ public class PageRank {
 
             if(child_list.size()>1)
                 context.getCounter(CustomCounter.NUMBER_OF_CHILD).increment(child_list.size());
-/*
-            context.write(key,new Node());
+
+     /*       context.write(key,new Node());
             //da eliminare
             for(i=0; i<child_list.size();i++){
 
@@ -152,8 +152,8 @@ public class PageRank {
 
             for(i=0; i<child_list.size(); i++){
                 //se è un nodo che riporta le informazioni
-                if(child_list.get(i).getPageRankReceived()==-1)
-                    node = Node.copy(child_list.get(i));
+                if(child_list.get(i).getPageRankReceived()==-1.0)
+                    node = child_list.get(i);
                 else
                     sum+=child_list.get(i).getPageRankReceived();
 
