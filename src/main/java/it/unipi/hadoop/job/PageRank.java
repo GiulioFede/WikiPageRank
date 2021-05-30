@@ -15,7 +15,8 @@ import java.util.regex.Pattern;
 public class PageRank {
 
     private static final String SEPARATOR = "//SEPARATOR//";
-    private static final Pattern separator_pat = Pattern.compile("(.*?)//SEPARATOR//");
+    private static final Pattern separator_pat = Pattern.compile("(.*?)"+SEPARATOR);
+    private static final Pattern outlinks_pat = Pattern.compile("\\[\\[(.*?)\\]\\]");
 
     public static class PageRankMapper extends Mapper<LongWritable, Text, Text, Node>
     {
@@ -68,13 +69,17 @@ public class PageRank {
             //riutilizzo node per i figli
             node.setOutlinks("");
 
-            String[] outlinks_list = outlinks.split("//:://");
-            //se possiede outlinks
-            if(outlinks_list.length>0){
-                for(i=0; i<outlinks_list.length;i++){
-                    node.setPageRankReceived(rank/ outlinks_list.length);
-                    context.write(new Text(outlinks_list[i]),node);
-                }
+
+            Matcher outlinks_match = outlinks_pat.matcher(outlinks);
+            Matcher outlinks_count = outlinks_pat.matcher(outlinks);
+
+            i = 0;
+            while(outlinks_count.find())
+                i++;
+
+            while(outlinks_match.find()){
+                node.setPageRankReceived(rank/ i);
+                context.write(new Text(outlinks_match.group(1)),node);
             }
 
         }

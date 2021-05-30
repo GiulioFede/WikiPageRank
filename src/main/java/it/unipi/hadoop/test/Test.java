@@ -50,14 +50,17 @@ public class Test {
 
         if(title_match.find())
                 System.out.println(title_match.group(1));
-        /*
+
                 Matcher outlinks = outlinks_pat.matcher(title_match.group(1));
-                if(outlinks.find())
-                    System.out.println(outlinks.group(1));*/
+                int c = outlinks.groupCount();
+                System.out.println(c);
+                while(outlinks.find())
+                    System.out.println(outlinks.group(1));/*
         if(title_match.find())
                 System.out.println(title_match.group(1));
         if(title_match.find())
                 System.out.println(title_match.group(1));
+                */
 
 
 
