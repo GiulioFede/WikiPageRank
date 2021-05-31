@@ -122,7 +122,7 @@ public class PageRank {
 
 
             sum = 0;
-            node = new Node();
+            node = new Node(); //TODO: prova node.setOutlinks("");
 
             child_list = new ArrayList<Node>();
             for(Node child : values)
@@ -157,11 +157,6 @@ public class PageRank {
 
 
 
-        }
-
-        @Override
-        protected void cleanup(Context context) throws IOException, InterruptedException {
-            super.cleanup(context);
         }
     }
 }

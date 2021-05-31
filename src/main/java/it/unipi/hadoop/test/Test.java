@@ -70,7 +70,7 @@ Pattern outlinks_pat2 = Pattern.compile(SEPARATOR+"(.*?)"+SEPARATOR);
             /*
                     Tipo di linea ricevuta: titolo ||SEPARATOR||[[link1]][[link2]]...[[linkN]]||SEPARATOR||rank||SEPARATOR||rankReceived||SEPARATOR||
             */
-
+/*
         String value = ("Jean Alingué    //SEPARATOR//[[Jean Alingué Bawoyeu]]//SEPARATOR//-1.0//SEPARATOR//-1.0//SEPARATOR//");
         String value2 = ("Jean Alingué Bawoyeu   //SEPARATOR////SEPARATOR//7.849293563579278E-4//SEPARATOR//7.849293563579278E-4//SEPARATOR//");
         String title="", outlinks="";
@@ -121,6 +121,14 @@ Pattern outlinks_pat2 = Pattern.compile(SEPARATOR+"(.*?)"+SEPARATOR);
                 System.out.println(new Text(internal_outlinks.group(1).trim()).toString()+"   "+node);
             }
         }
+
+ */
+
+        String s = "User:Mailer diabloMailer Diablo";
+        int posLastPipe = s.lastIndexOf("|");
+        System.out.println(posLastPipe);
+        System.out.println(s.substring(0,posLastPipe));
+
 
 /*
         String SEPARATOR = "//SEPARATOR//";
