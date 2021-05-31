@@ -88,7 +88,7 @@ public class WikiPageRank
         conf.set("damping_factor",String.valueOf(dampingFactor));
 
         int i = 0;
-        for(i=0; i<10; i++) {
+        for(i=0; i<5; i++) {
 
             Job computePageRank_job = Job.getInstance(conf);
             computePageRank_job.setJarByClass(WikiPageRank.class);
@@ -138,7 +138,7 @@ public class WikiPageRank
         FileInputFormat.addInputPath(computeSort_job, new Path(output + "/secondJob_"+(i-1)));
         FileOutputFormat.setOutputPath(computeSort_job, new Path(output + "/finalPageRank"));
 
-        computeSort_job.setNumReduceTasks(1);
+        computeSort_job.setNumReduceTasks(1); //TODO: aumentare a 3
 
         computeSort_job.setMapperClass(RankSort.RankSortMapper.class);
         computeSort_job.setReducerClass(RankSort.RankSortReducer.class);

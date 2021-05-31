@@ -119,7 +119,7 @@ public class PageRank {
 
         @Override
         protected void reduce(Text key, Iterable<Node> values, Context context) throws IOException, InterruptedException {
-            context.getCounter(CustomCounter.UTLIMO_REDUCE).increment(1);
+
 
             sum = 0;
             node = new Node();
@@ -136,6 +136,9 @@ public class PageRank {
                 else
                     sum+=child_list.get(i).getPageRankReceived();
 
+                if(key.toString().compareTo("2006")==0) {
+                    context.getCounter(CustomCounter.NUMBER_OF_CHILD).increment(1);
+                }
             }
 
 
