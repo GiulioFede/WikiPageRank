@@ -103,7 +103,7 @@ public class WikiPageRank
 
             FileOutputFormat.setOutputPath(computePageRank_job, new Path(output + "/secondJob_"+i));
 
-            computePageRank_job.setNumReduceTasks(1);
+            computePageRank_job.setNumReduceTasks(3);
 
             computePageRank_job.setMapperClass(PageRank.PageRankMapper.class);
             computePageRank_job.setReducerClass(PageRank.PageRankReducer.class);
