@@ -4,21 +4,22 @@ import pprint
 
 
 def filterLinks(title, links):
-    outlinks = re.findall("\\[\\[(.*?)\\]\\]", links)
-    outlinksv2=[]
-    for link in outlinks:
+    wiki_piped_links = re.findall("\\[\\[(.*?)\\]\\]", links)  # found all links
+    wiki_links = []
+
+    for link in wiki_piped_links:
         splitted = link
 
         if "|" in link:
-            lastIndexOfPipe = splitted.rindex("|", 0,len(splitted))
-            splitted = splitted[0:lastIndexOfPipe]
+            lastIndexOfPipe = splitted.rindex("|", 0, len(splitted))  # splitting links with pipes
+            splitted = splitted[0:lastIndexOfPipe]  # keeping only the part before the pipe
 
-        if (splitted == title) or (splitted in outlinksv2):
+        if (splitted == title) or (splitted in wiki_links):  # link already present or auto-referencing
             continue
 
-        outlinksv2.append(splitted)
+        wiki_links.append(splitted)  # list of parsed links
 
-    return outlinksv2
+    return wiki_links
 
 
 def parsePages(page):
@@ -35,8 +36,11 @@ sc.setLogLevel("ERROR")
 wiki_micro = sc.textFile("hdfs://namenode:9820/user/hadoop/input/wiki-micro.txt")
 
 lines = wiki_micro.count()
-mapPhase = wiki_micro.map(lambda e: parsePages(e))
+mapPages = wiki_micro.map(lambda e: parsePages(e))  # reading and parsing input file
+
 pp = pprint.PrettyPrinter(indent=4)
 pp.pprint(mapPhase.collect())
+
+mapInitialRank =
 
 sc.stop()
