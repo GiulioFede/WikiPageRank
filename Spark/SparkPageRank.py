@@ -1,6 +1,7 @@
 from pyspark import SparkContext
 import re
 import pprint
+from operator import add
 
 
 def filterLinks(title, links):
@@ -30,6 +31,12 @@ def parsePages(page):
     return title[0], outlinks, float(1/lines)
 
 
+def computeContributions(pages, pageRank):
+    count = len(pages)
+    for page in pages:
+        yield page, pageRank / count
+
+
 sc = SparkContext(appName="WikiPageRank", master="yarn")
 sc.setLogLevel("ERROR")
 
@@ -38,9 +45,16 @@ wiki_micro = sc.textFile("hdfs://namenode:9820/user/hadoop/input/wiki-micro.txt"
 lines = wiki_micro.count()
 mapPages = wiki_micro.map(lambda e: parsePages(e))  # reading and parsing input file
 
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(mapPages.collect())
+pageRanks = []
 
+for iteration in range(10):
+    contributions = mapPages.flatMap(lambda x: computeContributions(x[1], x[2]))
+    pprint.pprint(contributions.collect())
+    pageRanks = contributions.reduceByKey(add).mapValues(lambda rank: 0.15*(1/float(lines)) + 0.85*rank)
 
+pageRanksOrdered = pageRanks.takeOrdered(lines, key=lambda x: -x[1])
+
+#for(link, rank) in pageRanksOrdered:
+#    print("Title: %s Rank: %s" % (link, rank))
 
 sc.stop()
