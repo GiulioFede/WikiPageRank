@@ -18,7 +18,7 @@ def filterLinks(title, links):
         if (splitted == title) or (splitted in wiki_links):  # link already present or auto-referencing
             continue
 
-        wiki_links.append(splitted)  # list of parsed links
+        wiki_links.append(splitted.strip())  # list of parsed links
 
     return wiki_links
 
@@ -26,9 +26,9 @@ def filterLinks(title, links):
 def parsePages(page):
     title = re.findall("<title>(.*)</title>", page)
     text = re.findall("<text(.*?)</text>", page)
-    outlinks = filterLinks(title, text[0])
+    outlinks = filterLinks(title[0].strip(), text[0])
 
-    return title[0], outlinks, float(1/lines)
+    return title[0].strip(), outlinks, float(1/lines)
 
 
 def computeContributions(pages, pageRank):
@@ -49,12 +49,17 @@ pageRanks = []
 
 for iteration in range(10):
     contributions = mapPages.flatMap(lambda x: computeContributions(x[1], x[2]))
-    pprint.pprint(contributions.collect())
     pageRanks = contributions.reduceByKey(add).mapValues(lambda rank: 0.15*(1/float(lines)) + 0.85*rank)
 
-pageRanksOrdered = pageRanks.takeOrdered(lines, key=lambda x: -x[1])
+pageRanksOrdered = pageRanks.takeOrdered(10, key=lambda x: -x[1])
 
-#for(link, rank) in pageRanksOrdered:
-#    print("Title: %s Rank: %s" % (link, rank))
+i = 0
+rankPrecedente = 0
+for(link, rank) in pageRanksOrdered:
+    if rankPrecedente != rank:
+        i += 1
+
+    print("%i: Title: %s Rank: %s" % (i, link, rank))
+    rankPrecedente = rank
 
 sc.stop()
