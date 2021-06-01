@@ -23,8 +23,8 @@ def filterLinks(title, links):
 
 def parsePages(page):
     title = re.findall("<title>(.*)</title>", page)
-    text = re.findall("<text>(.*?)</text>", page)
-    outlinks = filterLinks(title, text)
+    text = re.findall("<text(.*?)</text>", page)
+    outlinks = filterLinks(title, text[0])
 
     return title[0], outlinks
 
@@ -35,6 +35,11 @@ sc.setLogLevel("ERROR")
 wiki_micro = sc.textFile("hdfs://namenode:9820/user/hadoop/input/wiki-micro.txt")
 
 lines = wiki_micro.count()
-print(lines)
+mapPhase = wiki_micro.map(lambda e: parsePages(e))
+print(mapPhase.collect())
+
+sc.stop()
+
+
 
 sc.stop()
