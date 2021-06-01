@@ -144,9 +144,10 @@ public class PageRank {
 
             //calcolo nuovo page rank
            // newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
-            newPageRank = (1-dampingFactor)*(1/((double)(numberOfPages))) + dampingFactor*sum;
-            node.setPageRank(newPageRank);
-
+            if(sum != 0) {
+                newPageRank = (1 - dampingFactor) * (1 / ((double) (numberOfPages))) + dampingFactor * sum;
+                node.setPageRank(newPageRank);
+            }
             context.write(key,node);
             /*
             //da eliminare
