@@ -2,18 +2,29 @@ from pyspark import SparkContext
 import re
 
 
-def filterLinks(title, links, page):
+def filterLinks(title, links):
+    #outlinks = re.findall("\\[\\[(.*?)\\]\\]", links)
+    #list(filter(lambda k: '|' in k, outlinks))
+    #if title in outlinks:
     outlinks = re.findall("\\[\\[(.*?)\\]\\]", links)
-    list(filter(lambda k: '|' in k, outlinks))
+    outlinksv2=[]
+    for link in outlinks:
+        if "|" in link:
+            splitted = link.split("|")
+            if (splitted[0] == title) or (splitted[0] in outlinksv2):
+                continue
 
-    if title in outlinks
+            outlinksv2.append(splitted[0])
+
+    return outlinksv2
+
 
 
 
 def parsePages(page):
     title = re.findall("<title>(.*)</title>", page)
-    text = re.findall("<text>(.*?)</text>", page)
-    outlinks = filterLinks(title, text)
+    text = re.findall("<text(.*?)</text>", page)
+    outlinks = filterLinks(title, text[0])
 
     return title[0], outlinks
 
@@ -24,6 +35,11 @@ sc.setLogLevel("ERROR")
 wiki_micro = sc.textFile("hdfs://namenode:9820/user/hadoop/input/wiki-micro.txt")
 
 lines = wiki_micro.count()
-print(lines)
+mapPhase = wiki_micro.map(lambda e: parsePages(e))
+print(mapPhase.collect())
+
+sc.stop()
+
+
 
 sc.stop()
