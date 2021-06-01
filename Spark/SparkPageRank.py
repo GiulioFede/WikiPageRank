@@ -27,7 +27,7 @@ def parsePages(page):
     text = re.findall("<text(.*?)</text>", page)
     outlinks = filterLinks(title, text[0])
 
-    return title[0], outlinks, 1/lines
+    return title[0], outlinks, float(1/lines)
 
 
 sc = SparkContext(appName="WikiPageRank", master="yarn")
