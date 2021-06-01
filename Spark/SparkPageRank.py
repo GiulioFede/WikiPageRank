@@ -27,7 +27,7 @@ def parsePages(page):
     text = re.findall("<text(.*?)</text>", page)
     outlinks = filterLinks(title, text[0])
 
-    return title[0], outlinks
+    return title[0], outlinks, 1/lines
 
 
 sc = SparkContext(appName="WikiPageRank", master="yarn")
@@ -39,8 +39,8 @@ lines = wiki_micro.count()
 mapPages = wiki_micro.map(lambda e: parsePages(e))  # reading and parsing input file
 
 pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(mapPhase.collect())
+pp.pprint(mapPages.collect())
 
-mapInitialRank =
+
 
 sc.stop()
