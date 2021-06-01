@@ -8,10 +8,12 @@ def filterLinks(title, links):
     outlinksv2=[]
     for link in outlinks:
         splitted = link
+
         if "|" in link:
-            lastIndexOfPipe = splitted.rindex("|", 0 ,len(splitted))
+            lastIndexOfPipe = splitted.rindex("|", 0,len(splitted))
             splitted = splitted[0:lastIndexOfPipe]
-        if (splitted[0] == title) or (splitted[0] in outlinksv2):
+
+        if (splitted == title) or (splitted in outlinksv2):
             continue
 
         outlinksv2.append(splitted)
