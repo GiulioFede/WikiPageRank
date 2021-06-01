@@ -1,6 +1,6 @@
 from pyspark import SparkContext
 import re
-
+import pprint
 
 def filterLinks(title, links):
     #outlinks = re.findall("\\[\\[(.*?)\\]\\]", links)
@@ -36,7 +36,8 @@ wiki_micro = sc.textFile("hdfs://namenode:9820/user/hadoop/input/wiki-micro.txt"
 
 lines = wiki_micro.count()
 mapPhase = wiki_micro.map(lambda e: parsePages(e))
-print(mapPhase.collect())
+pp = pprint.PrettyPrinter(indent=4)
+pp.pprint(mapPhase.collect())
 
 sc.stop()
 
