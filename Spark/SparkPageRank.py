@@ -49,10 +49,10 @@ pageRanks = []
 
 for iteration in range(10):
     contributions = mapPages.flatMap(lambda x: computeContributions(x[1], x[2]))
-    pageRanks = contributions.reduceByKey(add).mapValues(lambda rank: 0.15*(1/float(lines)) + 0.85*rank)
+    pageRanks = contributions.reduceByKey(add).mapValues(lambda rank: 0.15 + 0.85*rank)
 
 pageRanksOrdered = pageRanks.takeOrdered(lines, key=lambda x: -x[1])
-
+pageRanksOrdered = sc.parallelize(pageRanksOrdered)
 pageRanksOrdered.saveAsTextFile('sparkOutput.txt')
 i = 0
 rankPrecedente = 0
