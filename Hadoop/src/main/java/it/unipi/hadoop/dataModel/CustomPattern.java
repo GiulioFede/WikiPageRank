@@ -50,7 +50,7 @@ public class CustomPattern {
                     outlinkTmp = outlinkTmp.substring(0, lastDoubleSquaredBracketsPosition);
                 }
 
-                int lastPipePosition = outlinkTmp.lastIndexOf("|");
+                int lastPipePosition = outlinkTmp.lastIndexOf("|"); 
 
                 if(lastPipePosition!=-1) {
                     outlinkTmp = outlinkTmp.substring(0, lastPipePosition);

@@ -10,6 +10,10 @@ def filterLinks(title, links):
     for link in wiki_piped_links:
         splitted = link
 
+        if "[[" in link:
+            lastIndexOfDoubleSquaredBrackets = splitted.rindex("[[", 0, len(splitted))
+            splitted = splitted[0:lastIndexOfDoubleSquaredBrackets]
+
         if "|" in link:
             lastIndexOfPipe = splitted.rindex("|", 0, len(splitted))  # splitting links with pipes
             splitted = splitted[0:lastIndexOfPipe]  # keeping only the part before the pipe
