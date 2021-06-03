@@ -47,7 +47,7 @@ public class CustomPattern {
                 //get true link
                 outlinkTmp = outlinks_match.group(1);
                 int lastPipePosition = outlinkTmp.lastIndexOf("|");
-                
+
                 if(lastPipePosition!=-1) {
                     outlinkTmp = outlinkTmp.substring(0, lastPipePosition);
                 }
