@@ -43,13 +43,14 @@ public class CustomPattern {
                  */
                 //get true link
                 String outlinkTmp = outlinks_match.group(1);
-                int lastPipePosition = outlinkTmp.lastIndexOf("|");
 
                 int lastDoubleSquaredBracketsPosition = outlinkTmp.lastIndexOf("[[");
 
                 if(lastDoubleSquaredBracketsPosition != -1){
                     outlinkTmp = outlinkTmp.substring(0, lastDoubleSquaredBracketsPosition);
                 }
+
+                int lastPipePosition = outlinkTmp.lastIndexOf("|");
 
                 if(lastPipePosition!=-1) {
                     outlinkTmp = outlinkTmp.substring(0, lastPipePosition);
