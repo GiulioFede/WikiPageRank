@@ -45,9 +45,16 @@ public class CustomPattern {
                 String outlinkTmp = outlinks_match.group(1);
                 int lastPipePosition = outlinkTmp.lastIndexOf("|");
 
+                int lastDoubleSquaredBracketsPosition = outlinkTmp.lastIndexOf("[[");
+
+                if(lastDoubleSquaredBracketsPosition != -1){
+                    outlinkTmp = outlinkTmp.substring(0, lastDoubleSquaredBracketsPosition);
+                }
+
                 if(lastPipePosition!=-1) {
                     outlinkTmp = outlinkTmp.substring(0, lastPipePosition);
                 }
+
                 if(!outlinks.toString().contains("[[" + outlinkTmp + "]]") && outlinkTmp.compareTo(title)!=0) {
                     //here i have one link
                     outlinks.append("[[").append(outlinkTmp).append("]]");

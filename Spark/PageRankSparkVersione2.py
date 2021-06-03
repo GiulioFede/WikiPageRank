@@ -63,4 +63,4 @@ if __name__ == "__main__":
     pageRanksOrdered.saveAsTextFile('sparkOutput_giulio.txt')
 
     sc.stop()
-                                  
+
