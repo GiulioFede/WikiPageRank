@@ -4,7 +4,7 @@ public enum CustomCounter {
     NUMBER_OF_PAGES,
     NUMBER_OF_RANK_ITERATIONS,
     ULTIMO_MAP,
-    UTLIMO_REDUCE,
+    ULTIMO_REDUCE,
     SUM,
     NUMBER_OF_CHILD
 }

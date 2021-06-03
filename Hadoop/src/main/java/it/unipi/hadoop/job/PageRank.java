@@ -2,7 +2,6 @@ package it.unipi.hadoop.job;
 
 import it.unipi.hadoop.dataModel.CustomCounter;
 import it.unipi.hadoop.dataModel.Node;
-import it.unipi.hadoop.dataModel.Node2;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -39,27 +38,26 @@ public class PageRank {
             i = 0;
         }
 
+        /**
+         * Tipo di linea ricevuta:
+         * titolo ||SEPARATOR||[[link1]][[link2]]...[[linkN]]||SEPARATOR||rank||SEPARATOR||rankReceived||SEPARATOR||
+         */
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
             context.getCounter(CustomCounter.ULTIMO_MAP).increment(1);
-            /*
-                    Tipo di linea ricevuta: titolo ||SEPARATOR||[[link1]][[link2]]...[[linkN]]||SEPARATOR||rank||SEPARATOR||rankReceived||SEPARATOR||
-            */
 
             //create Node from input
             Matcher match = separator_pat.matcher(value.toString());
             Matcher outlinks_match = outlinks_pat2.matcher(value.toString());
             if(match.find()) {
                 title = match.group(1);
-                match.find();
+                match.find(); // FIX: serve?
             }
             if(outlinks_match.find())
                 outlinks = outlinks_match.group(1);
             if(match.find())
                 rank = Double.parseDouble(match.group(1));
-
-
 
             //se è la prima iterazione settiamo il rank come 1/N con N numero di pagine
             if(rank==-1)
@@ -94,7 +92,6 @@ public class PageRank {
 
     public static class PageRankReducer extends Reducer<Text,Node,Text,Node>
     {
-
         Node node;
         double sum;
         ArrayList<Node> child_list;
@@ -114,20 +111,15 @@ public class PageRank {
             numberOfPages = Integer.parseInt(context.getConfiguration().get("number_of_pages"));
         }
 
-        //da eliminare
-        Node2 node2 = new Node2();
-
         @Override
         protected void reduce(Text key, Iterable<Node> values, Context context) throws IOException, InterruptedException {
-
 
             sum = 0;
             node = new Node(); //TODO: prova node.setOutlinks("");
 
-            child_list = new ArrayList<Node>();
+            child_list = new ArrayList<>();
             for(Node child : values)
                 child_list.add(Node.copy(child));
-
 
             for(i=0; i<child_list.size(); i++){
                 //se è un nodo che riporta le informazioni
@@ -136,28 +128,26 @@ public class PageRank {
                 else
                     sum+=child_list.get(i).getPageRankReceived();
 
+                // DEBUG
                 if(key.toString().compareTo("2006")==0) {
                     context.getCounter(CustomCounter.NUMBER_OF_CHILD).increment(1);
                 }
             }
 
-
             //calcolo nuovo page rank
-           // newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
+            // newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
             if(sum != 0) {
                 newPageRank = (1 - dampingFactor) * (1 / ((double) (numberOfPages))) + dampingFactor * sum;
                 node.setPageRank(newPageRank);
             }
             context.write(key,node);
+
             /*
             //da eliminare
             node2.setPageRank(node.getPageRank());
             context.write(key, node2);
 
              */
-
-
-
         }
     }
 }

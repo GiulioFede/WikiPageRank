@@ -1,6 +1,5 @@
 package it.unipi.hadoop.job;
 
-import it.unipi.hadoop.dataModel.CustomCounter;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -32,18 +31,18 @@ public class RankSort {
             rank = 0;
         }
 
+        /**
+         * Tipo di linea ricevuta:
+         * titolo ||SEPARATOR||[[link1]][[link2]]...[[linkN]]||SEPARATOR||rank||SEPARATOR||rankReceived||SEPARATOR||
+         */
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-
-            /*
-                    Tipo di linea ricevuta: titolo ||SEPARATOR||[[link1]][[link2]]...[[linkN]]||SEPARATOR||rank||SEPARATOR||rankReceived||SEPARATOR||
-            */
 
             //create Node from input
             Matcher match = separator_pat.matcher(value.toString());
             if(match.find()) {
                 title = match.group(1);
-                match.find();
+                match.find(); // FIX: serve?
             }
             if(match.find())
                 rank = Double.parseDouble(match.group(1));
@@ -68,12 +67,13 @@ public class RankSort {
             k= 0;
         }
 
+        /**
+         * Ingresso:
+         * key, [title1, title2,...,titleN]
+         */
         @Override
         protected void reduce(DoubleWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
-            /*
-                    In input avremo: key, [title1, title2,...,titleN]
-             */
             //da eliminare
             k++;
 

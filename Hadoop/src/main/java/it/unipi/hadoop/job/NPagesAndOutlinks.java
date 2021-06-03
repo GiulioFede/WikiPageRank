@@ -12,10 +12,9 @@ import java.io.IOException;
 
 public class NPagesAndOutlinks {
 
-    /*
-        Sono i mapper che direttamente salvano su HDFS
+     /**
+     *  Sono i mapper che direttamente salvano su HDFS (Map-Only job)
      */
-
 
     //::::::::::::::::::::::::::::::::::::::: MAPPER :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     public static class NPagesAndOutlinksMapper extends Mapper<LongWritable, Text, Text, Node>
@@ -48,13 +47,8 @@ public class NPagesAndOutlinks {
 
     }
 
-
-
-    /*
-            Perchè non utilizziamo il reducer: supponiamo che nel file ogni pagina stia su una sola riga e che quindi non si ripeta la stessa
-                                               pagina su più righe
-            TODO: chiedere al professore se dobbiamo collezionare outlink
+    /**
+     * Perchè non utilizziamo il reducer: supponiamo che nel file ogni pagina stia su una sola riga e che quindi non si ripeta la stessa
+     * pagina su più righe
      */
-
-
 }

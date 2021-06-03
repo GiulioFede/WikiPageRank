@@ -1,8 +1,5 @@
 package it.unipi.hadoop;
 
-import java.io.IOException;
-import java.util.StringTokenizer;
-
 import it.unipi.hadoop.dataModel.CustomCounter;
 import it.unipi.hadoop.dataModel.Node;
 import it.unipi.hadoop.job.NPagesAndOutlinks;
@@ -11,29 +8,22 @@ import it.unipi.hadoop.job.RankSort;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class WikiPageRank
 {
-
-
-
-    /*
-            INGRESSO
-                - damping factor: damping factor args[0]
-                - threshold: soglia per la convergenza args[1]
-                - wiki-micro.txt args[2]
-                - output args[3]
+    /** INGRESSO
+     *  - damping factor: damping factor args[0]
+     *  - threshold: soglia per la convergenza args[1]
+     *  - wiki-micro.txt args[2]
+     *  - output args[3]
      */
+
     public static void main(final String[] args) throws Exception {
         System.out.println("*** PageRank Hadoop implementation ***");
 
@@ -118,8 +108,9 @@ public class WikiPageRank
 
             //wait
             success = computePageRank_job.waitForCompletion(true);
-            if (success)
-                System.out.println("Lavoro "+(i+1)+" completato");
+            if (success) {
+                System.out.println("Lavoro " + (i + 1) + " completato");
+            }
             else {
                 System.out.println("Lavoro fallito: non è stato possibile calcolare il page rank");
                 System.exit(0);
@@ -161,7 +152,5 @@ public class WikiPageRank
         }
 
         System.exit(1);
-
-
     }
 }
