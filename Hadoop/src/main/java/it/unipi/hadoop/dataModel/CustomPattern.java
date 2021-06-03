@@ -48,7 +48,7 @@ public class CustomPattern {
                 if(lastPipePosition!=-1) {
                     outlinkTmp = outlinkTmp.substring(0, lastPipePosition);
                 }
-                if(!outlinks.toString().contains(outlinkTmp) && outlinkTmp.compareTo(title)!=0) {
+                if(!outlinks.toString().contains("[[" + outlinkTmp + "]]") && outlinkTmp.compareTo(title)!=0) {
                     //here i have one link
                     outlinks.append("[[").append(outlinkTmp).append("]]");
                 }
