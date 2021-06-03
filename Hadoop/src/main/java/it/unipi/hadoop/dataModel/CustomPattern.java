@@ -15,7 +15,6 @@ public class CustomPattern {
 
     public static String getTitleContent(String str){
         Matcher title_match = title_pat.matcher(str);
-        title_match.matches();
 
         //if title exists
         if(title_match.find())
@@ -24,15 +23,13 @@ public class CustomPattern {
             return null;
     }
 
-    private static String outlinkTmp;
-
     public static String getOutlinks(String str, String title){
 
         StringBuilder outlinks = new StringBuilder();
 
         //retrieve text from str
         Matcher text_match = text_pat.matcher(str);
-        text_match.matches();
+
         if(text_match.find()){
             String text = text_match.group(1);
             //retrieve all the outlinks
@@ -45,7 +42,7 @@ public class CustomPattern {
                  * Since different users can use different "myCustomName" then take "TrueLink" as outlink.
                  */
                 //get true link
-                outlinkTmp = outlinks_match.group(1);
+                String outlinkTmp = outlinks_match.group(1);
                 int lastPipePosition = outlinkTmp.lastIndexOf("|");
 
                 if(lastPipePosition!=-1) {

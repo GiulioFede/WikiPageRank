@@ -57,7 +57,7 @@ for iteration in range(10):
 
 pageRanksOrdered = pageRanks.takeOrdered(10, key=lambda x: -x[1])  # take the first 10 links ordered
 fileToSave = sc.parallelize(pageRanksOrdered)
-fileToSave.saveAsTextFile('sparkOutput_1.txt')
+fileToSave.saveAsTextFile('sparkOutput_2.txt')
 
 i = 0
 rankPrecedente = 0
