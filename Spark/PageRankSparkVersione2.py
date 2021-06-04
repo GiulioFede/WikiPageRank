@@ -58,9 +58,9 @@ if __name__ == "__main__":
     for iteration in range(1):
 
         contributions = titles.join(ranks).flatMap(
-            lambda page: distributeRankToOutlinks(page[0],page[1][0],page[1][1]))
+            lambda page: distributeRankToOutlinks(page[0], page[1][0], page[1][1]))
 
-        ranks = contributions.reduceByKey(lambda x,y: x+y).mapValues(lambda rank: float((0.15*(float(1/numberOfPages)) + 0.85*rank)))
+        ranks = contributions.reduceByKey(lambda x, y: x+y).mapValues(lambda rank: float((0.15*(float(1/numberOfPages)) + 0.85*rank)))
 
     pageRanksOrdered = ranks.takeOrdered(ranks.count(), key=lambda x: -x[1])
     pageRanksOrdered = sc.parallelize(pageRanksOrdered)
