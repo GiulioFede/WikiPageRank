@@ -57,7 +57,7 @@ public class WikiPageRank implements Serializable {
             @Override
             public Double call(ArrayList<String> strings) throws Exception {
 
-                return (1.0/numberOfPages);
+                return (1.0/((double)numberOfPages));
             }
         });
         System.out.println("primo rank fatto");
@@ -73,7 +73,7 @@ public class WikiPageRank implements Serializable {
                     ArrayList<Tuple2<String,Double>> list = new ArrayList<>();
                     list.add(new Tuple2<String, Double>(tuple._1,0.0));
                     for(int j=0; j<num_outlinks;j++)
-                        list.add(new Tuple2(tuple_outlinks.get(j),tuple._2._2/num_outlinks));
+                        list.add(new Tuple2(tuple_outlinks.get(j),tuple._2._2/((double)(num_outlinks))));
 
                     return list.iterator();
                 }
@@ -112,7 +112,7 @@ public class WikiPageRank implements Serializable {
     }
 
     private static Double computeNewRank(Double lastRank, long numberOfPages){
-        return (0.15*(1/numberOfPages) + 0.85*lastRank);
+        return ((0.15*(1.0/((double)(numberOfPages))) + 0.85*lastRank));
     }
 
     static class MyTupleComparator implements
