@@ -53,13 +53,14 @@ public class WikiPageRank implements Serializable {
         JavaSparkContext sc = new JavaSparkContext(configuration);
         sc.setLogLevel("ERROR");
 
-        if(args.length < 1) {
-            System.out.println("Usage: <#iterations>");
+        if(args.length < 2) {
+            System.out.println("Usage: <#iterations> <input_file>");
             System.exit(-1);
         }
         int iterations = Integer.parseInt(args[0]);
+        String file_input = args[1];
 
-        JavaRDD<String> wiki_rdd = sc.textFile("hdfs://namenode:9820/user/hadoop/input/wiki-micro.txt");
+        JavaRDD<String> wiki_rdd = sc.textFile(file_input);
 
         // initialize rdd with pairs of title and outlinks
         JavaPairRDD<String,ArrayList<String>> titles_rdd = wiki_rdd.mapToPair
