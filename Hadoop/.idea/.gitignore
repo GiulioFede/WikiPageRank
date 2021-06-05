@@ -2,7 +2,7 @@
 /shelf/
 /workspace.xml
 # Datasource local storage ignored files
-/../../../../../../:\Users\Asus ROG\IdeaProjects\PageRankHadoop\.idea/dataSources/
+/../../../../../../../:\Users\Asus ROG\IdeaProjects\WikiPageRank\Hadoop\.idea/dataSources/
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/

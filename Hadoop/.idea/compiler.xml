@@ -7,8 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="PageRankHadoop" />
-        <module name="Hadoop" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="PageRankHadoop" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>

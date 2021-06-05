@@ -6,15 +6,15 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * Questa classe contiene tutte le informazioni di una pagina. In particolare:
- * - outlinks --> lista dei nomi delle altre pagine a cui si riferisce
- * - pageRank --> page rank della pagina
- * Per questioni di ottimizzazione tale classe contiene anche un ulteriore campo:
- * - pageRankReceived --> parte del page rank ricevuto da un altra pagina
- * Tale classe non vedrà mai entrambi i 3 campi non nulli, piuttosto può trovarsi in solo due dei seguenti stati:
- * 1) outlinks e page rank non nulli (e quindi pageRankReceived nullo), pertanto servono unicamente a identificare le proprietà della pagina
- * 2) outlinks e page rank nulli, pertanto pageRankReceived != nullo conterrà una frazione del page rank di qualche altro nodo/pagina
- */
+ * This class contains all the information of a page. In particular:
+ * - outlinks -> list of the names of the other pages to which it refers
+ * - pageRank -> page rank of the page
+ * For optimization reasons this class also contains an additional field:
+ * - pageRankReceived -> part of the page rank received from another page
+ * This class will never see both 3 non-null fields, rather it can be in only two of the following states:
+ * 1) outlinks and page rank not null (and therefore pageRankReceived null), therefore they only serve to identify the properties of the page
+ * 2) null outlinks and page rank, therefore pageRankReceived! = Null will contain a fraction of the page rank of some other node / page
+ **/
 public class Node implements Writable,Comparable<Node>  {
 
     private String outlinks;
