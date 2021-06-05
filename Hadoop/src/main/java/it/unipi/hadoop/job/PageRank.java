@@ -1,6 +1,5 @@
 package it.unipi.hadoop.job;
 
-import it.unipi.hadoop.dataModel.CustomCounter;
 import it.unipi.hadoop.dataModel.Node;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -39,13 +38,11 @@ public class PageRank {
         }
 
         /**
-         * Tipo di linea ricevuta:
-         * titolo ||SEPARATOR||[[link1]][[link2]]...[[linkN]]||SEPARATOR||rank||SEPARATOR||rankReceived||SEPARATOR||
+         * Type of line received:
+         * title ||SEPARATOR||[[link1]][[link2]]...[[linkN]]||SEPARATOR||rank||SEPARATOR||rankReceived||SEPARATOR||
          */
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-
-            context.getCounter(CustomCounter.ULTIMO_MAP).increment(1);
 
             //create Node from input
             Matcher match = separator_pat.matcher(value.toString());
@@ -129,7 +126,6 @@ public class PageRank {
             }
 
             //compute new page rank
-            // newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
             newPageRank = (1 - dampingFactor) * (1 / ((double) (numberOfPages))) + dampingFactor * sum;
             node.setPageRank(newPageRank);
             context.write(key,node);

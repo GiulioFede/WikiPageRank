@@ -56,34 +56,24 @@ public class RankSort {
     {
 
         ArrayList<String> titles;
-        int i=0;
-        //da eliminare
-        long k;
-        @Override
-        protected void setup(Context context) throws IOException, InterruptedException {
-            super.setup(context);
+        int i;
 
-            //da eliminare
-            k= 0;
-        }
 
         /**
-         * Ingresso:
+         * Input:
          * key, [title1, title2,...,titleN]
          */
         @Override
         protected void reduce(DoubleWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
-            //da eliminare
-            k++;
 
             titles = new ArrayList<>();
             for(Text title : values){
                titles.add(title.toString());
             }
 
-            for(i=0; i<titles.size(); i++) //eliminare il k
-                context.write(new Text(k+". "+titles.get(i)),new DoubleWritable(-1*key.get()));
+            for(i=0; i<titles.size(); i++)
+                context.write(new Text(titles.get(i)),new DoubleWritable(-1*key.get()));
 
         }
     }
