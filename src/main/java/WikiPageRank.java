@@ -1,5 +1,3 @@
-import dataModel.Pair;
-import dataModel.Rank;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -12,13 +10,10 @@ import scala.Tuple2;
 import utils.CustomPattern;
 
 import java.io.Serializable;
+import java.util.*;
+
+
 import java.util.ArrayList;
-
-
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 
 public class WikiPageRank implements Serializable {
 
@@ -72,7 +67,7 @@ public class WikiPageRank implements Serializable {
             System.out.println("Ciclo "+i);
             JavaPairRDD<String,Double> contributions = titles_rdd.join(ranks).flatMapToPair(new PairFlatMapFunction<Tuple2<String, Tuple2<ArrayList<String>, Double>>, String, Double>() {
                 @Override
-                public Iterable<Tuple2<String, Double>> call(Tuple2<String, Tuple2<ArrayList<String>, Double>> tuple) throws Exception {
+                public Iterator<Tuple2<String, Double>> call(Tuple2<String, Tuple2<ArrayList<String>, Double>> tuple) throws Exception {
                     ArrayList<String> tuple_outlinks = tuple._2._1;
                     int num_outlinks = tuple_outlinks.size();
                     ArrayList<Tuple2<String,Double>> list = new ArrayList<>();
@@ -80,7 +75,7 @@ public class WikiPageRank implements Serializable {
                     for(int j=0; j<num_outlinks;j++)
                         list.add(new Tuple2(tuple_outlinks.get(j),tuple._2._2/num_outlinks));
 
-                    return list;
+                    return list.iterator();
                 }
             });
             System.out.println("contributions");
