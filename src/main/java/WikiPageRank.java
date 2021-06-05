@@ -36,6 +36,7 @@ public class WikiPageRank implements Serializable {
         //load wiki
         JavaRDD<String> wiki_rdd = sc.textFile("hdfs://namenode:9820/user/hadoop/input/wiki-micro.txt");
         System.out.println("file letto");
+        System.out.println(wiki_rdd.take(20));
         //initialize rdd with pairs of title and outlinks
         JavaPairRDD<String,ArrayList<String>> titles_rdd = wiki_rdd.mapToPair(new PairFunction<String, String, ArrayList<String>>() {
             @Override
@@ -55,7 +56,7 @@ public class WikiPageRank implements Serializable {
         System.out.println("titoli e outlinks prelevati");
         //count number of page
         long numberOfPages = titles_rdd.count();
-
+        System.out.println("numero di pagine "+numberOfPages);
         //initialize each title with first rank (1/n)
         JavaPairRDD<String,Double> ranks = titles_rdd.mapValues(new Function<ArrayList<String>, Double>() {
             @Override
@@ -65,6 +66,7 @@ public class WikiPageRank implements Serializable {
             }
         });
         System.out.println("primo rank fatto");
+        System.out.println(ranks.take(20));
         //loop
         for(int i =0; i<10; i++){
             System.out.println("Ciclo "+i);
@@ -81,6 +83,8 @@ public class WikiPageRank implements Serializable {
                     return list;
                 }
             });
+            System.out.println("contributions");
+            System.out.println(contributions.take(20));
 
             //update ranks
             ranks = contributions.reduceByKey(new Function2<Double, Double, Double>() {
@@ -94,6 +98,8 @@ public class WikiPageRank implements Serializable {
                     return computeNewRank(lastRank,numberOfPages);
                 }
             });
+            System.out.println("ranks");
+            System.out.println(ranks.take(20));
         }
         System.out.println("ciclo terminato");
         //sorting
