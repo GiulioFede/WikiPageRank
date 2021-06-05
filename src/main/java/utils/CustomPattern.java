@@ -27,7 +27,7 @@ public class CustomPattern {
 
     public static ArrayList<String> getOutlinks(String str, String title) {
 
-        outlinks.clear();
+        outlinks = new ArrayList<>();
 
         //retrieve text from str
         Matcher text_match = text_pat.matcher(str);
