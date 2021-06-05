@@ -43,17 +43,23 @@ public class NPagesAndOutlinks {
             String titlePage = CustomPattern.getTitleContent(line);
 
             if(titlePage!=null){
-                node.setOutlinks(CustomPattern.getOutlinks(line,titlePage));
-                //send father
-                context.write(new Text(titlePage.trim()), node);
-
                 //send each child
                 children = new ArrayList<>();
                 children = CustomPattern.getListOfOutlinks(line,titlePage);
-                node = new Node();
-                node.setPageRankReceived(-2);
-                for(i = 0; i<children.size(); i++){
-                    context.write(new Text(children.get(i)),node);
+
+                //se il nodo non è sink
+                if(children.size()>0) {
+                    //send father
+                    node.setOutlinks(CustomPattern.getOutlinks(line, titlePage));
+                    //send father
+                    context.write(new Text(titlePage.trim()), node);
+
+
+                    node = new Node();
+                    node.setPageRankReceived(-2);
+                    for (i = 0; i < children.size(); i++) {
+                        context.write(new Text(children.get(i)), node);
+                    }
                 }
             }
         }
