@@ -37,6 +37,7 @@ public class NPagesAndOutlinks {
 
             //get line of file
             String line = value.toString();
+            node = new Node();
 
             //get content of title
             String titlePage = CustomPattern.getTitleContent(line);
