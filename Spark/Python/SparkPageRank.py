@@ -1,8 +1,8 @@
 from pyspark import SparkContext
 import re
-import pprint
 
 
+#find the all links in <text>...</text>, filter and format some particular links
 def filterLinks(title, links):
     wiki_piped_links = re.findall("\\[\\[(.*?)\\]\\]", links)  # found all links
     wiki_links = []
@@ -23,58 +23,64 @@ def filterLinks(title, links):
 
         wiki_links.append(splitted.strip())  # list of parsed links
 
-    return wiki_links
+    return wiki_links #return the 'title' outlinks
 
-
+#compute and retrieve the title and its adjacencyList (outlinks)
 def parsePages(page):
-    title = re.findall("<title>(.*)</title>", page)
-    text = re.findall("<text(.*?)</text>", page)
+    title = re.findall("<title>(.*)</title>", page) #retrieve title of pages
+    text = re.findall("<text(.*?)</text>", page) #retrieve all the text between <text>...</text>
     outlinks = filterLinks(title[0].strip(), text[0])
 
     return title[0].strip(), outlinks
 
-
+#function in flatMap transformation
 def distributeRankToOutlinks(father, outlinks, rank):
     num_outlinks = len(outlinks)
-    list = [(father, 0)]
+    list = [(father, 0)] # to include the 'father' of the outlinks in the list
     for link in outlinks:
         list.append((link, rank / num_outlinks))
     return list
 
-
+#compute the PageRank of a page
 def computeNewRank(lastRank):
-    if lastRank == 0:
-        return float(1.0 / numberOfPages)
-    else:
-        return float((0.15 * (float(1 / numberOfPages)) + 0.85 * lastRank))
+    return float((0.15 * ((1 / float(numberOfPages))) + 0.85 * lastRank))
 
 
 if __name__ == "__main__":
 
+    #initialize a new Spark Context
     sc = SparkContext(appName="WikiPageRank", master="yarn")
+
+    #delete some log lines (this option can be removed)
     sc.setLogLevel("ERROR")
 
+    #build an RDD from input file
     lines = sc.textFile("hdfs://namenode:9820/user/hadoop/input/wiki-micro.txt")
 
-    titles = lines.map(lambda page: parsePages(
-        page)).cache()  # esempio di tupla --> ('Image:Lynne Slater2.jpg', ['EastEnders', 'Lynne Hobbs', 'Category:EastEnders images'])
+    #map transformation on each line
+    #example of tuple-->('title', ['outlink1', 'outlink2', ....., 'outlinkN'])
+    titles = lines.map(lambda page: parsePages(page)).cache()
 
+    #Count number of pages
     numberOfPages = titles.count()
 
-    ranks = titles.map(lambda page: (page[0], float(1.0 / numberOfPages)))
+    #initialize rank for each page with 1/numberOfPages
+    #example of (K,V) structure --> ('title', InitialPageRank)
+    ranks = titles.map(lambda page: (page[0], float(1.0 / float(numberOfPages))))
 
+    #cicle for compute the PageRank of pages
     for iteration in range(10):
-        contributions = titles.join(ranks).flatMap(
-            lambda page: distributeRankToOutlinks(page[0], page[1][0], page[1][1]))
+        #JOIN TRANSFORMATION -->combine outlinks and pageRank of a page
+        #example of structure of contributions AFTER join: [('title', ([listOfOutlinks], pageRank))....]
+        #FLATMAP TRANSFORMATION --> compute the rank to be distributed among the outlinks
+        #example of structure of contributions AFTER flatMap: [('title', incomingPageRank)....]
+        contributions = titles.join(ranks).flatMap(lambda page: distributeRankToOutlinks(page[0], page[1][0], page[1][1]))
 
+        #REDUCEBYKEY TRANSFORMATION --> sum all incomingPageRanks of a page --> (page, partialPageRank)
+        #MAPVALUES TRANSFORMATION --> compute the PageRank of the page with the formula
         ranks = contributions.reduceByKey(lambda x, y: x + y).mapValues(lambda rank: computeNewRank(rank))
 
-    # titles = []
-    # for result in ranks.collect():
-    #     if(result[0] in titles):
-    #         print("Doppione",result[0])
-    #     titles.append(result[0])
-
+    #Order the pages by PageRank and save the total rank in a file
     pageRanksOrdered = ranks.takeOrdered(ranks.count(), key=lambda x: -x[1])
     pageRanksOrdered = sc.parallelize(pageRanksOrdered)
     pageRanksOrdered.saveAsTextFile('sparkOutput_giulio_prova1.txt')
