@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11">
-      <module name="SparkJavaPageRank" target="3.8.1" />
+      <module name="SparkJavaPageRank" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
