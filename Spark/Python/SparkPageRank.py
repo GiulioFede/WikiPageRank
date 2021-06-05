@@ -1,6 +1,6 @@
 from pyspark import SparkContext
 import re
-
+import sys
 
 #find the all links in <text>...</text>, filter and format some particular links
 def filterLinks(title, links):
@@ -45,7 +45,7 @@ def distributeRankToOutlinks(father, outlinks, rank):
 def computeNewRank(lastRank):
     return float((0.15 * ((1 / float(numberOfPages))) + 0.85 * lastRank))
 
-
+address = "hdfs://namenode:9820/user/hadoop/"
 if __name__ == "__main__":
 
     #initialize a new Spark Context
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     sc.setLogLevel("ERROR")
 
     #build an RDD from input file
-    lines = sc.textFile("hdfs://namenode:9820/user/hadoop/input/wiki-micro.txt")
+    lines = sc.textFile(address + str(sys.argv[1]))
 
     #map transformation on each line
     #example of tuple-->('title', ['outlink1', 'outlink2', ....., 'outlinkN'])
@@ -81,8 +81,9 @@ if __name__ == "__main__":
         ranks = contributions.reduceByKey(lambda x, y: x + y).mapValues(lambda rank: computeNewRank(rank))
 
     #Order the pages by PageRank and save the total rank in a file
-    pageRanksOrdered = ranks.takeOrdered(ranks.count(), key=lambda x: -x[1])
-    pageRanksOrdered = sc.parallelize(pageRanksOrdered)
-    pageRanksOrdered.saveAsTextFile('sparkOutput_giulio_prova1.txt')
-
+    #pageRanksOrdered = ranks.takeOrdered(ranks.count(), key=lambda x: -x[1])
+    #pageRanksOrdered = sc.parallelize(pageRanksOrdered)
+    #pageRanksOrdered.saveAsTextFile('SparkPageRank.txt')
+    pageRankOrdered = ranks.sortBy(lambda a: -a[1])
+    pageRankOrdered.saveAsTextFile('SparkPageRank.txt')
     sc.stop()
