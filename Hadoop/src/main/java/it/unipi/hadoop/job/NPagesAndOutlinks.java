@@ -86,13 +86,17 @@ public class NPagesAndOutlinks {
                 nodes.add(Node.copy(node));
             }
 
+            boolean trovato = false;
             for(i=0; i<nodes.size();i++){
                 //se il nodo ricevuto indica la struttura del key node
-                if(nodes.get(i).getPageRankReceived()!=-2)
+                if(nodes.get(i).getPageRankReceived()!=-2) {
                     node = nodes.get(i);
+                    trovato = true;
+                }
             }
 
-            context.write(key,node);
+            if(trovato)
+                context.write(key,node);
 
         }
     }
