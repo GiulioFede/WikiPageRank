@@ -93,9 +93,9 @@ public class WikiPageRank {
                 }
             });
         }
-
+        System.out.println("ciclo terminato");
         //sorting
-        List<Tuple2<String,Double>> pageRanksOrdered = ranks.takeOrdered(((int)(ranks.count())), new Comparator<Tuple2<String, Double>>() {
+        List<Tuple2<String,Double>> pageRanksOrdered = ranks.takeOrdered(10, new Comparator<Tuple2<String, Double>>() {
             @Override
             public int compare(Tuple2<String, Double> o1, Tuple2<String, Double> o2) {
                 if(o2._2>o1._2)
@@ -106,6 +106,8 @@ public class WikiPageRank {
                     return -1;
             }
         });
+
+
         System.out.println("sorting fatto");
         //save
         JavaRDD<Tuple2<String,Double>> pageRanksOrderedRdd = sc.parallelize(pageRanksOrdered);
