@@ -14,7 +14,7 @@ import java.io.IOException;
  * This class will never see both 3 non-null fields, rather it can be in only two of the following states:
  * 1) outlinks and page rank not null (and therefore pageRankReceived null), therefore they only serve to identify the properties of the page
  * 2) null outlinks and page rank, therefore pageRankReceived! = Null will contain a fraction of the page rank of some other node / page
- */
+ **/
 public class Node implements Writable,Comparable<Node>  {
 
     private String outlinks;
