@@ -48,6 +48,9 @@ def computeNewRank(lastRank):
 
 address = "hdfs://namenode:9820/user/hadoop/"
 if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Number of parameters are " + str(len(sys.argv))+"! The number of parameters must be equal to three!")
+        sys.exit(1)
 
     #initialize a new Spark Context
     sc = SparkContext(appName="WikiPageRank", master="yarn")
@@ -86,5 +89,5 @@ if __name__ == "__main__":
     #pageRanksOrdered = sc.parallelize(pageRanksOrdered)
     #pageRanksOrdered.saveAsTextFile('SparkPageRank.txt')
     pageRankOrdered = ranks.sortBy(lambda a: -a[1])
-    pageRankOrdered.saveAsTextFile('SparkPageRank.txt')
+    pageRankOrdered.saveAsTextFile(sys.argv[2])
     sc.stop()
