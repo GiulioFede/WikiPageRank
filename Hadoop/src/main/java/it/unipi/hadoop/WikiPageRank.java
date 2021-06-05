@@ -17,29 +17,28 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class WikiPageRank
 {
-    /** INGRESSO
-     *  - damping factor: damping factor args[0]
-     *  - threshold: soglia per la convergenza args[1]
-     *  - wiki-micro.txt args[2]
-     *  - output args[3]
+    /** INPUT
+     *  - damping factor: args[0]
+     *  - wiki-micro.txt args[1]
+     *  - output args[2]
      */
 
     public static void main(final String[] args) throws Exception {
-        System.out.println("*** PageRank Hadoop implementation ***");
+        System.out.println(":::::::::::::::::::::::::PageRank Hadoop implementation::::::::::::::::::::::::: ");
 
         Configuration conf = new Configuration();
-        System.out.println("INPUT: "+args[0]+" ,  "+args[1]+"  ,  "+args[2]+"  ,  "+args[3]);
 
-        if (args.length != 4) {
+        if (args.length != 3) {
             System.err.println("Usage: PageRank <#alfa> <input> <output>");
             System.exit(1);
         }
 
-        //set from inputs
+        //get damping factor from input
         double dampingFactor = Double.parseDouble(args[0]);
-        double threshold = Double.parseDouble(args[1]);
-        Path input = new Path(args[2]);
-        Path output = new Path(args[3]);
+        //get 'input path' from input
+        Path input = new Path(args[1]);
+        //get 'output path' from input --> NB: this output path will be used as folder for storing all partial results including the final rank
+        Path output = new Path(args[2]);
 
         //::::::::::::::::::::::::::::::first JOB: compute number of pages and outlinks:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -63,29 +62,33 @@ public class WikiPageRank
         //wait
         boolean success = nPagesAndOutlinks_job.waitForCompletion(true);
         if(success)
-            System.out.println("Lavoro completato");
+            System.out.println("Job completed successfully: parsing and number of pages completed");
         else {
-            System.out.println("Lavoro fallito: non è stato possibile terminare il conteggio del numero delle pagine e dei rispettivi outlinks");
+            System.out.println("Job failed: it was not possible to parse and finish counting the number of pages and respective outlinks");
             System.exit(0);
         }
 
-        //add field into xml configuration file (we will use that in other map reduce taks)
+        //add field into xml configuration file (we will use that in other map reduce tasks)
         long numberOfPages = nPagesAndOutlinks_job.getCounters().findCounter(CustomCounter.NUMBER_OF_PAGES).getValue();
         conf.set("number_of_pages",String.valueOf(numberOfPages));
 
-        //::::::::::::::::::::::::::::::second JOB: compute final rank until convergence:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        //::::::::::::::::::::::::::::::second JOB: compute final rank iteratively:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+        //add field into xml configuration file (we will use that in each iteration of this second job)
         conf.set("damping_factor",String.valueOf(dampingFactor));
 
-        int i = 0;
+        int i;
         for(i=0; i<2; i++) {
 
             Job computePageRank_job = Job.getInstance(conf);
             computePageRank_job.setJarByClass(WikiPageRank.class);
-            computePageRank_job.setJobName("Compute page rank ");
+            computePageRank_job.setJobName("Compute page rank");
 
 
-            //as input take previous result
+            /*
+                we have to discriminate the first iteration from the remaining ones because in the first iteration the input
+                we use comes from the output of the first job, while the following inputs come from the outputs of the second iterative jobs
+             */
             if(i==0)
                 FileInputFormat.addInputPath(computePageRank_job, new Path(output + "/firstJob"));
             else
@@ -109,10 +112,10 @@ public class WikiPageRank
             //wait
             success = computePageRank_job.waitForCompletion(true);
             if (success) {
-                System.out.println("Lavoro " + (i + 1) + " completato");
+                System.out.println("Job 2 (iteration " + (i + 1) + ") completed successfully");
             }
             else {
-                System.out.println("Lavoro fallito: non è stato possibile calcolare il page rank");
+                System.out.println("Job failed: page rank could not be calculated");
                 System.exit(0);
             }
 
@@ -129,7 +132,11 @@ public class WikiPageRank
         FileInputFormat.addInputPath(computeSort_job, new Path(output + "/secondJob_"+(i-1)));
         FileOutputFormat.setOutputPath(computeSort_job, new Path(output + "/finalPageRank"));
 
-        computeSort_job.setNumReduceTasks(1); //TODO: aumentare a 3
+        /*
+        We use only one reducer because if we used several reducers we will have that each perform a local sorting
+        of the keys it receives preventing us from recovering the entire ranking by simply merging the outputs of each reducer
+         */
+        computeSort_job.setNumReduceTasks(1);
 
         computeSort_job.setMapperClass(RankSort.RankSortMapper.class);
         computeSort_job.setReducerClass(RankSort.RankSortReducer.class);
@@ -145,9 +152,9 @@ public class WikiPageRank
         //wait
         success = computeSort_job.waitForCompletion(true);
         if (success)
-            System.out.println("Lavoro completato: sorting terminato");
+            System.out.println("Job completed successfully: ranking calculated");
         else {
-            System.out.println("Lavoro fallito: non è stato possibile calcolare il sorting");
+            System.out.println("Job failed: ranking not calculated");
             System.exit(0);
         }
 
