@@ -35,9 +35,6 @@ public class WikiPageRank implements Serializable {
             @Override
             public Tuple2<String, ArrayList<String>> call(String page) throws Exception {
 
-                //clear
-                outlinks.clear();
-
                 //get title
                 title = CustomPattern.getTitleContent(page);
                 //get text
