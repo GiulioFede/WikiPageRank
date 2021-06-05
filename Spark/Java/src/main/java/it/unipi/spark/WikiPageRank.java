@@ -54,13 +54,13 @@ public class WikiPageRank implements Serializable {
         sc.setLogLevel("ERROR");
 
         if(args.length < 2) {
-            System.out.println("Usage: <#iterations> <input_file>");
+            System.out.println("Usage: <#iterations> <file_input>");
             System.exit(-1);
         }
         int iterations = Integer.parseInt(args[0]);
         String file_input = args[1];
 
-        JavaRDD<String> wiki_rdd = sc.textFile(file_input);
+        JavaRDD<String> wiki_rdd = sc.textFile(file_input).cache();
 
         // initialize rdd with pairs of title and outlinks
         JavaPairRDD<String,ArrayList<String>> titles_rdd = wiki_rdd.mapToPair
@@ -106,12 +106,12 @@ public class WikiPageRank implements Serializable {
                     );
         }
 
-        //sorting
         List<Tuple2<String,Double>> pageRanksOrdered = ranks.takeOrdered(
                 ((int)(ranks.count())), TupleComparator.INSTANCE);
 
         JavaRDD<Tuple2<String,Double>> pageRanksOrderedRdd = sc.parallelize(pageRanksOrdered);
-        pageRanksOrderedRdd.saveAsTextFile("sparkJavaOutput");
+
+        pageRanksOrderedRdd.saveAsTextFile("sparkJavaOutput_5");
 
         sc.stop();
     }

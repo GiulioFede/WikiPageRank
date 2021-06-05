@@ -1,6 +1,7 @@
 from pyspark import SparkContext
 import re
 import sys
+import time
 
 #find the all links in <text>...</text>, filter and format some particular links
 def filterLinks(title, links):
@@ -54,11 +55,11 @@ if __name__ == "__main__":
     #delete some log lines (this option can be removed)
     sc.setLogLevel("ERROR")
 
-    #build an RDD from input file
+    # build an RDD from input file
     lines = sc.textFile(address + str(sys.argv[1]))
 
-    #map transformation on each line
-    #example of tuple-->('title', ['outlink1', 'outlink2', ....., 'outlinkN'])
+    # map transformation on each line
+    # example of tuple-->('title', ['outlink1', 'outlink2', ....., 'outlinkN'])
     titles = lines.map(lambda page: parsePages(page)).cache()
 
     #Count number of pages
