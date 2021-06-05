@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class WikiPageRank {
+public class WikiPageRank implements Serializable {
 
     private static ArrayList<String> outlinks = new ArrayList<>();
     private static String title;
