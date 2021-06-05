@@ -16,7 +16,6 @@ public class NPagesAndOutlinks {
     private static final Pattern title_pat = Pattern.compile("<title>(.*)</title>");
     private static final Pattern text_pat = Pattern.compile("<text(.*?)</text>");
     private static final Pattern link_pat = Pattern.compile("\\[\\[(.*?)\\]\\]");
-    public static final String SEPARATOR = "//SEPARATOR//";
     private static final Pattern separator_pat = Pattern.compile("(.*?)//SEPARATOR//");
 
      /**

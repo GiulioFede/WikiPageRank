@@ -80,11 +80,12 @@ public class Node implements Writable,Comparable<Node>  {
         pageRankReceived = dataInput.readDouble();
     }
 
+    public static final String SEPARATOR = "//SEPARATOR//";
     @Override
     public String toString() {
 
-        return  CustomPattern.SEPARATOR + outlinks + CustomPattern.SEPARATOR +
+        return  SEPARATOR + outlinks + SEPARATOR +
                 pageRank +
-                CustomPattern.SEPARATOR + pageRankReceived + CustomPattern.SEPARATOR;
+                SEPARATOR + pageRankReceived + SEPARATOR;
     }
 }
