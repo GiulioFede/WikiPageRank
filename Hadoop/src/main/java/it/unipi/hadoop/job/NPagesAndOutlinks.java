@@ -16,10 +16,9 @@ public class NPagesAndOutlinks {
     private static final Pattern title_pat = Pattern.compile("<title>(.*)</title>");
     private static final Pattern text_pat = Pattern.compile("<text(.*?)</text>");
     private static final Pattern link_pat = Pattern.compile("\\[\\[(.*?)\\]\\]");
-    private static final Pattern separator_pat = Pattern.compile("(.*?)//SEPARATOR//");
 
      /**
-     *  Sono i mapper che direttamente salvano su HDFS (Map-Only job)
+     *  Mappers directly save to HDFS (Map-Only job)
      */
 
     //::::::::::::::::::::::::::::::::::::::: MAPPER :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -52,29 +52,27 @@ public class PageRank {
             Matcher outlinks_match = outlinks_pat2.matcher(value.toString());
             if(match.find()) {
                 title = match.group(1);
-                match.find(); // FIX: serve?
+                match.find();
             }
             if(outlinks_match.find())
                 outlinks = outlinks_match.group(1);
             if(match.find())
                 rank = Double.parseDouble(match.group(1));
 
-            //se è la prima iterazione settiamo il rank come 1/N con N numero di pagine
+            //if it's the first iteration initialize the rank with 1/N
             if(rank==-1)
                 rank = (1/((double)(numberOfPages)));
 
             node.setPageRank(rank);
             node.setPageRankReceived(-1);
             node.setOutlinks(outlinks);
-            //emetto nodo chiave con le sue informazioni
+            //emit key node with its information
             context.write(new Text(title.trim()),node);
 
-            //riutilizzo node per i figli
             node.setOutlinks("");
 
-            //se esistono outlinks...
+            //if there are outlinks --> [[link1]][[link2]]...[[linkN]]
             if(outlinks.compareTo("")!=0){
-                //qui li avremo in questa forma --> [[link1]][[link2]]...[[linkN]]
                 Matcher internal_outlinks = internal_outlinks_pat.matcher(outlinks);
                 Matcher internal_outlinks_count = internal_outlinks_pat.matcher(outlinks);
 
@@ -115,39 +113,27 @@ public class PageRank {
         protected void reduce(Text key, Iterable<Node> values, Context context) throws IOException, InterruptedException {
 
             sum = 0;
-            node = new Node(); //TODO: prova node.setOutlinks("");
+            node = new Node();
 
             child_list = new ArrayList<>();
             for(Node child : values)
                 child_list.add(Node.copy(child));
 
             for(i=0; i<child_list.size(); i++){
-                //se è un nodo che riporta le informazioni
+                //if the node structure reports information about the outlinks of the key node
                 if(child_list.get(i).getPageRankReceived()==-1)
                     node = child_list.get(i);
                 else
+                    //sum all the contributions received from other nodes that are linked with the key node ( otherNode->keyNode)
                     sum+=child_list.get(i).getPageRankReceived();
-
-                // DEBUG
-                if(key.toString().compareTo("2006")==0) {
-                    context.getCounter(CustomCounter.NUMBER_OF_CHILD).increment(1);
-                }
             }
 
-            //calcolo nuovo page rank
+            //compute new page rank
             // newPageRank = dampingFactor*(1/((double)(numberOfPages))) + (1-dampingFactor)*sum;
-            if(sum != 0) {
-                newPageRank = (1 - dampingFactor) * (1 / ((double) (numberOfPages))) + dampingFactor * sum;
-                node.setPageRank(newPageRank);
-            }
+            newPageRank = (1 - dampingFactor) * (1 / ((double) (numberOfPages))) + dampingFactor * sum;
+            node.setPageRank(newPageRank);
             context.write(key,node);
 
-            /*
-            //da eliminare
-            node2.setPageRank(node.getPageRank());
-            context.write(key, node2);
-
-             */
         }
     }
 }
