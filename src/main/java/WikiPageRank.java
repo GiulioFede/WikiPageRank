@@ -97,14 +97,14 @@ public class WikiPageRank implements Serializable {
         }
         System.out.println("ciclo terminato");
         //sorting
-        List<Tuple2<String,Double>> pageRanksOrdered = ranks.takeOrdered(10, MyTupleComparator.INSTANCE);
+       // List<Tuple2<String,Double>> pageRanksOrdered = ranks.takeOrdered(10, MyTupleComparator.INSTANCE);
 
 
         System.out.println("sorting fatto");
         //save
-        JavaRDD<Tuple2<String,Double>> pageRanksOrderedRdd = sc.parallelize(pageRanksOrdered);
+       // JavaRDD<Tuple2<String,Double>> pageRanksOrderedRdd = sc.parallelize(pageRanksOrdered);
         System.out.println("parallelizzazione fatta");
-        pageRanksOrderedRdd.saveAsTextFile("sparkJavaOutput.txt");
+        ranks.saveAsTextFile("sparkJavaOutput.txt");
         System.out.println("file salvato");
 
         sc.stop();
