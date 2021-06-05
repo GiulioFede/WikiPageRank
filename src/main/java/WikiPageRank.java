@@ -33,7 +33,7 @@ public class WikiPageRank {
 
         //load wiki
         JavaRDD<String> wiki_rdd = sc.textFile("hdfs://namenode:9820/user/hadoop/input/wiki-micro.txt");
-
+        System.out.println("file letto");
         //initialize rdd with pairs of title and outlinks
         JavaPairRDD<String,ArrayList<String>> titles_rdd = wiki_rdd.mapToPair(new PairFunction<String, String, ArrayList<String>>() {
             @Override
@@ -50,7 +50,7 @@ public class WikiPageRank {
                 return new Tuple2<String, ArrayList<String>>(title,outlinks);
             }
         }).cache();
-
+        System.out.println("titoli e outlinks prelevati");
         //count number of page
         long numberOfPages = titles_rdd.count();
 
@@ -62,9 +62,10 @@ public class WikiPageRank {
                 return (1.0/numberOfPages);
             }
         });
-
+        System.out.println("primo rank fatto");
         //loop
         for(int i =0; i<10; i++){
+            System.out.println("Ciclo "+i);
             JavaPairRDD<String,Double> contributions = titles_rdd.join(ranks).flatMapToPair(new PairFlatMapFunction<Tuple2<String, Tuple2<ArrayList<String>, Double>>, String, Double>() {
                 @Override
                 public Iterable<Tuple2<String, Double>> call(Tuple2<String, Tuple2<ArrayList<String>, Double>> tuple) throws Exception {
