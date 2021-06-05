@@ -66,28 +66,4 @@ public class CustomPattern {
         return outlinks.toString();
     }
 
-    //:::::::::::::::::::::::::::::::::::::: metodi utilizzati dal job 2 :::::::::::::::::::::::::::::::
-
-    public static void getTitleOutlinksRankRankReceive(String title,
-                                                       String outlinks
-                                                       ){
-
-    }
-
-    public static String getTargettContent(String str, String target){
-
-        Matcher match = separator_pat.matcher(str);
-        if(match.find()){
-            if(target=="title") return match.group(1);
-            if(match.find()){
-                if(target=="outlinks") return match.group(1);
-                if(match.find()){
-
-                }
-            }
-        }
-
-        return null;
-    }
-
 }
