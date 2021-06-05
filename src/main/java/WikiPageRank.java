@@ -98,12 +98,7 @@ public class WikiPageRank {
         List<Tuple2<String,Double>> pageRanksOrdered = ranks.takeOrdered(10, new Comparator<Tuple2<String, Double>>() {
             @Override
             public int compare(Tuple2<String, Double> o1, Tuple2<String, Double> o2) {
-                if(o2._2>o1._2)
-                    return 1;
-                else if (o2._2 == o1._2)
-                    return 0;
-                else
-                    return -1;
+                return -o1._2.compareTo(o2._2);
             }
         });
 
