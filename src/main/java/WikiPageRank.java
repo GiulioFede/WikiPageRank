@@ -47,6 +47,7 @@ public class WikiPageRank implements Serializable {
             }
         }).cache();
         System.out.println("titoli e outlinks prelevati");
+        System.out.println(titles_rdd.take(30));
         //count number of page
         long numberOfPages = titles_rdd.count();
         System.out.println("numero di pagine "+numberOfPages);
