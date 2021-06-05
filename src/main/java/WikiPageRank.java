@@ -106,10 +106,12 @@ public class WikiPageRank {
                     return -1;
             }
         });
-
+        System.out.println("sorting fatto");
         //save
         JavaRDD<Tuple2<String,Double>> pageRanksOrderedRdd = sc.parallelize(pageRanksOrdered);
+        System.out.println("parallelizzazione fatta");
         pageRanksOrderedRdd.saveAsTextFile("sparkJavaOutput.txt");
+        System.out.println("file salvato");
 
         sc.stop();
     }
