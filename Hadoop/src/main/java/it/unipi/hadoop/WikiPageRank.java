@@ -50,12 +50,15 @@ public class WikiPageRank
         FileInputFormat.addInputPath(nPagesAndOutlinks_job, input);
         FileOutputFormat.setOutputPath(nPagesAndOutlinks_job, new Path(output+"/firstJob"));
 
-        nPagesAndOutlinks_job.setNumReduceTasks(0);
+        nPagesAndOutlinks_job.setNumReduceTasks(1);
 
         nPagesAndOutlinks_job.setMapperClass(NPagesAndOutlinks.NPagesAndOutlinksMapper.class);
+        nPagesAndOutlinks_job.setReducerClass(NPagesAndOutlinks.NPagesAndOutlinksReducer.class);
 
         nPagesAndOutlinks_job.setMapOutputKeyClass(Text.class);
         nPagesAndOutlinks_job.setMapOutputValueClass(Node.class);
+        nPagesAndOutlinks_job.setOutputKeyClass(Text.class);
+        nPagesAndOutlinks_job.setOutputValueClass(Node.class);
 
         nPagesAndOutlinks_job.setInputFormatClass(TextInputFormat.class);
         nPagesAndOutlinks_job.setOutputFormatClass(TextOutputFormat.class);

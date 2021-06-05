@@ -1,5 +1,6 @@
 package it.unipi.hadoop.job;
 
+import it.unipi.hadoop.dataModel.CustomCounter;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -46,6 +47,7 @@ public class RankSort {
             }
             if(match.find())
                 rank = Double.parseDouble(match.group(1));
+
 
             context.write(new DoubleWritable(-rank),new Text(title));
 

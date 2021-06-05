@@ -1,5 +1,6 @@
 package it.unipi.hadoop.dataModel;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,6 +65,47 @@ public class CustomPattern {
         }
 
         return outlinks.toString();
+    }
+
+    public static ArrayList<String> getListOfOutlinks(String str, String title){
+
+        ArrayList<String> outlinks = new ArrayList<>();
+
+        //retrieve text from str
+        Matcher text_match = text_pat.matcher(str);
+
+        if(text_match.find()){
+            String text = text_match.group(1);
+            //retrieve all the outlinks
+            Matcher outlinks_match = link_pat.matcher(text);
+            while(outlinks_match.find()){
+                /**
+                 * There is the possibility that a wiki link is a "wiki piped link". For example the user can write a link
+                 * using [[TrueLink | myCustomName]] to make it appear as "myCustomName" when the page is saved.
+                 * Nevertheless "myCustomName is not a real page, rather "TrueLink" is the real page.
+                 * Since different users can use different "myCustomName" then take "TrueLink" as outlink.
+                 */
+                //get true link
+                String outlinkTmp = outlinks_match.group(1).trim();
+
+                int lastDoubleSquaredBracketsPosition = outlinkTmp.lastIndexOf("[[");
+
+                if(lastDoubleSquaredBracketsPosition != -1){
+                    outlinkTmp = outlinkTmp.substring(0, lastDoubleSquaredBracketsPosition);
+                }
+
+                int lastPipePosition = outlinkTmp.lastIndexOf("|");
+
+                if(lastPipePosition!=-1) {
+                    outlinkTmp = outlinkTmp.substring(0, lastPipePosition);
+                }
+
+                if(!outlinks.contains(outlinkTmp) && outlinkTmp.compareTo(title)!=0)
+                    outlinks.add(outlinkTmp);
+            }
+        }
+
+        return outlinks;
     }
 
     //:::::::::::::::::::::::::::::::::::::: metodi utilizzati dal job 2 :::::::::::::::::::::::::::::::
