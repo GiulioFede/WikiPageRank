@@ -83,9 +83,13 @@ public class RankSort {
             for(Text title : values){
                titles.add(title.toString());
             }
-
+/*
             for(i=0; i<titles.size(); i++) //eliminare il k
                 context.write(new Text(k+". "+titles.get(i)),new DoubleWritable(-1*key.get()));
+
+ */
+            for(i=0; i<titles.size(); i++)
+                context.write(new Text(""),new DoubleWritable(-1*key.get()));
 
         }
     }
