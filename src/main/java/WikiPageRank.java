@@ -10,6 +10,8 @@ import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.api.java.function.PairFunction;
 import scala.Tuple2;
 import utils.CustomPattern;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -95,12 +97,7 @@ public class WikiPageRank {
         }
         System.out.println("ciclo terminato");
         //sorting
-        List<Tuple2<String,Double>> pageRanksOrdered = ranks.takeOrdered(10, new Comparator<Tuple2<String, Double>>() {
-            @Override
-            public int compare(Tuple2<String, Double> o1, Tuple2<String, Double> o2) {
-                return -o1._2.compareTo(o2._2);
-            }
-        });
+        List<Tuple2<String,Double>> pageRanksOrdered = ranks.takeOrdered(10, MyTupleComparator.INSTANCE);
 
 
         System.out.println("sorting fatto");
@@ -115,6 +112,18 @@ public class WikiPageRank {
 
     private static Double computeNewRank(Double lastRank, long numberOfPages){
         return (0.15*(1/numberOfPages) + 0.85*lastRank);
+    }
+
+    static class MyTupleComparator implements
+            Comparator<Tuple2<String, Double>>, Serializable {
+        final static MyTupleComparator INSTANCE = new MyTupleComparator();
+        // note that the comparison is performed on the key's frequency
+        // assuming that the second field of Tuple2 is a count or frequency
+        public int compare(Tuple2<String,Double> t1,
+                           Tuple2<String, Double> t2) {
+            return -t1._2.compareTo(t2._2);    // sort descending
+            // return t1._2.compareTo(t2._2);  // sort ascending
+        }
     }
 
 }
