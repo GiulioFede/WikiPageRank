@@ -120,8 +120,9 @@ public class WikiPageRank
                 System.exit(0);
             }
 
-            if(!conf.getBoolean("Convergence", false)){
+            if(!conf.getBoolean("Convergence", true)){
                 System.out.println("Convergence is achieved after "+ (i+1)+" iterations");
+                i++;
                 break;
             }
             else
