@@ -1,5 +1,6 @@
 package it.unipi.hadoop.job;
 
+import it.unipi.hadoop.dataModel.CustomCounter;
 import it.unipi.hadoop.dataModel.Node;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -127,10 +128,16 @@ public class PageRank {
 
             //compute new page rank
             newPageRank = (dampingFactor * (1 / ((double) (numberOfPages)))) + ((1-dampingFactor) * sum);
-        /*
-            if((100*((Math.abs(node.getPageRank()-newPageRank))/node.getPageRank())) > 0.5 && Integer.parseInt(context.getConfiguration().get("convergence"))== 0)
+
+            if((100*((Math.abs(node.getPageRank()-newPageRank))/node.getPageRank())) > 0.5 &&
+                    Integer.parseInt(context.getConfiguration().get("convergence"))== 0) {
+
                 context.getConfiguration().set("convergence", String.valueOf(1));
-        */
+                context.getCounter(CustomCounter.CONVERGENCE).increment(1);
+            }
+            else
+                context.getCounter(CustomCounter.CONVERGENCE).increment(0);
+
             node.setPageRank(newPageRank);
             context.write(key,node);
 
