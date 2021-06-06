@@ -127,7 +127,7 @@ public class WikiPageRank
                     break;
                 }
                 else
-                    conf.setBoolean("Convergence", false);
+                conf.set("convergence", String.valueOf(0));
 
         }
 
