@@ -120,14 +120,14 @@ public class WikiPageRank
                 System.out.println("Job failed: page rank could not be calculated");
                 System.exit(0);
             }
-/*
+
             if(Integer.parseInt(computePageRank_job.getConfiguration().get("convergence")) == 0){
                     System.out.println("Convergence is achieved after "+ (i+1)+" iterations" +
                             " Value:" +nPagesAndOutlinks_job.getCounters().findCounter(CustomCounter.CONVERGENCE).getValue());
                     i++;
                     break;
                 }
-*/
+
 
         }
 
