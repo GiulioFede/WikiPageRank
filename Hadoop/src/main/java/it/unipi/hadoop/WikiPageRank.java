@@ -76,8 +76,9 @@ public class WikiPageRank
 
         //add field into xml configuration file (we will use that in each iteration of this second job)
         conf.set("damping_factor",String.valueOf(dampingFactor));
-        conf.setBoolean("Convergence", false);
-
+        /**
+         * conf.setBoolean("Convergence", false);
+        */
         int i;
         for(i=0; i<10; i++) {
 
@@ -120,14 +121,14 @@ public class WikiPageRank
                 System.exit(0);
             }
 
-            if(!conf.getBoolean("Convergence", true)){
-                System.out.println("Convergence is achieved after "+ (i+1)+" iterations");
-                i++;
-                break;
-            }
-            else
-                conf.setBoolean("Convergence", false);
-
+           /** if(!conf.getBoolean("Convergence", true)){
+                    System.out.println("Convergence is achieved after "+ (i+1)+" iterations");
+                    i++;
+                    break;
+                }
+                else
+                    conf.setBoolean("Convergence", false);
+            */
         }
 
         //:::::::::::::::::::::::::::::::::: third job: compute sorting ::::::::::::::::::::::::::::::::::::::::::::::::

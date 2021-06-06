@@ -127,10 +127,10 @@ public class PageRank {
 
             //compute new page rank
             newPageRank = (dampingFactor * (1 / ((double) (numberOfPages)))) + ((1-dampingFactor) * sum);
-
+            /**
             if((100*((Math.abs(node.getPageRank()-newPageRank))/node.getPageRank())) > 1 && !context.getConfiguration().getBoolean("Convergence", false))
                 context.getConfiguration().setBoolean("Convergence", true);
-
+            */
             node.setPageRank(newPageRank);
             context.write(key,node);
 
