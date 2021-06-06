@@ -133,10 +133,9 @@ public class PageRank {
                     Integer.parseInt(context.getConfiguration().get("convergence"))== 0) {
 
                 context.getConfiguration().set("convergence", String.valueOf(1));
-                context.getCounter(CustomCounter.CONVERGENCE).increment(1);
+
             }
-            else
-                context.getCounter(CustomCounter.CONVERGENCE).increment(0);
+
 
             node.setPageRank(newPageRank);
             context.write(key,node);
