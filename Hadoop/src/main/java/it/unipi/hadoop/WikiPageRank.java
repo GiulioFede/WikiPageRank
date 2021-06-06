@@ -76,9 +76,9 @@ public class WikiPageRank
 
         //add field into xml configuration file (we will use that in each iteration of this second job)
         conf.set("damping_factor",String.valueOf(dampingFactor));
-/*
+
         conf.set("convergence", String.valueOf(0));
-*/
+
         int i;
         for(i=0; i<10; i++) {
 
