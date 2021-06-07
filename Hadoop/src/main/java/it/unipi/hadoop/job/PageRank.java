@@ -95,6 +95,7 @@ public class PageRank {
         static double dampingFactor;
         static int numberOfPages;
         double newPageRank;
+        int convergence;
 
         @Override
         protected void setup(Context context) throws IOException, InterruptedException {
@@ -102,6 +103,7 @@ public class PageRank {
             node = new Node();
             sum = 0;
             i = 0;
+            convergence = 0;
             dampingFactor = Double.parseDouble(context.getConfiguration().get("damping_factor"));
             newPageRank = 0;
             numberOfPages = Integer.parseInt(context.getConfiguration().get("number_of_pages"));
@@ -130,12 +132,12 @@ public class PageRank {
             newPageRank = (dampingFactor * (1 / ((double) (numberOfPages)))) + ((1-dampingFactor) * sum);
 
             if((100*((Math.abs(node.getPageRank()-newPageRank))/node.getPageRank())) > 0.5 &&
-                    Integer.parseInt(context.getConfiguration().get("convergence"))== 0) {
-
+                   convergence == 0) {
+                convergence = 1;
                 context.getConfiguration().set("convergence", String.valueOf(1));
 
             }
-
+            //Integer.parseInt(context.getConfiguration().get("convergence"))
 
             node.setPageRank(newPageRank);
             context.write(key,node);
