@@ -60,6 +60,12 @@ public class Node implements Writable,Comparable<Node>  {
     public void setPageRankReceived(double pageRankReceived) {
         this.pageRankReceived = pageRankReceived;
     }
+    
+    public void reset(){
+        this.outlinks = "";
+        this.pageRank = -1;
+        this.pageRankReceived = -1;
+    }
 
     @Override
     public int compareTo(Node o) {
