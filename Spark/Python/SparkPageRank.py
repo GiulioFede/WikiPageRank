@@ -51,8 +51,8 @@ def computeNewRank(lastRank):
 
 address = "hdfs://namenode:9820/user/hadoop/"
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Number of parameters are " + str(len(sys.argv))+"! The number of parameters must be equal to three!")
+    if len(sys.argv) != 4:
+        print("Number of parameters are " + str(len(sys.argv))+"! The number of parameters must be equal to four!")
         sys.exit(1)
 
     # initialize a new Spark Context
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     ranks = titles.map(lambda page: (page[0], float(1.0 / float(numberOfPages))))
 
     # cicle for compute the PageRank of pages
-    for iteration in range(iterations):
+    for iteration in range(int(iterations)):
         # JOIN TRANSFORMATION -->combine outlinks and pageRank of a page
         # example of structure of contributions AFTER join: [('title', ([listOfOutlinks], pageRank))....]
         # FLATMAP TRANSFORMATION --> compute the rank to be distributed among the outlinks
@@ -93,5 +93,5 @@ if __name__ == "__main__":
     # Order the pages by PageRank and save the total rank in a file
     pageRanksOrdered = ranks.takeOrdered(ranks.count(), key=lambda x: -x[1])
     pageRanksOrdered = sc.parallelize(pageRanksOrdered)
-    pageRankOrdered.saveAsTextFile(sys.argv[3])
+    pageRanksOrdered.saveAsTextFile(sys.argv[3])
     sc.stop()
