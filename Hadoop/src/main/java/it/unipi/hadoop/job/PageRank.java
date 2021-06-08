@@ -111,7 +111,7 @@ public class PageRank {
         protected void reduce(Text key, Iterable<Node> values, Context context) throws IOException, InterruptedException {
 
             sum = 0;
-            node = new Node();
+            node.reset();
 
             child_list = new ArrayList<>();
             for(Node child : values)
