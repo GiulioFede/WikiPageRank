@@ -46,8 +46,8 @@ def distributeRankToOutlinks(father, outlinks, rank):
     return list
 
 #compute the PageRank of a page
-def computeNewRank(lastRank):
-    return float((0.15 * ((1 / float(numberOfPages))) + 0.85 * lastRank))
+def computeNewRank(sum):
+    return float((0.15 * ((1 / float(numberOfPages))) + 0.85 * sum))
 
 address = "hdfs://namenode:9820/user/hadoop/"
 if __name__ == "__main__":
