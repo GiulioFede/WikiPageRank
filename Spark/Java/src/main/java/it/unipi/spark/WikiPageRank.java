@@ -60,7 +60,7 @@ public class WikiPageRank implements Serializable {
         int iterations = Integer.parseInt(args[0]);
         String file_input = args[1];
 
-        JavaRDD<String> wiki_rdd = sc.textFile(file_input).cache();
+        JavaRDD<String> wiki_rdd = sc.textFile(file_input);
 
         // initialize rdd with pairs of title and outlinks
         JavaPairRDD<String,ArrayList<String>> titles_rdd = wiki_rdd.mapToPair
