@@ -18,7 +18,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 public class WikiPageRank
 {
     /** INPUT
-     *  - damping factor: args[0]
+     *  - random jump factor: args[0]
      *  - wiki-micro.txt args[1]
      *  - output args[2]
      */
@@ -33,8 +33,8 @@ public class WikiPageRank
             System.exit(1);
         }
 
-        //get damping factor from input
-        double dampingFactor = Double.parseDouble(args[0]);
+        //get random jump factor from input
+        double randomJumpFactor = Double.parseDouble(args[0]);
         //get 'input path' from input
         Path input = new Path(args[1]);
         //get 'output path' from input --> NB: this output path will be used as folder for storing all partial results including the final rank
@@ -75,7 +75,7 @@ public class WikiPageRank
         //::::::::::::::::::::::::::::::second JOB: compute final rank iteratively:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         //add field into xml configuration file (we will use that in each iteration of this second job)
-        conf.set("damping_factor",String.valueOf(dampingFactor));
+        conf.set("random_jump_factor",String.valueOf(randomJumpFactor));
 
         //conf.set("convergence", String.valueOf(0));
 
