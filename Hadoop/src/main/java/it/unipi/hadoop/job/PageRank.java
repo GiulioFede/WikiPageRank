@@ -92,7 +92,7 @@ public class PageRank {
         double sum;
         ArrayList<Node> child_list;
         int i;
-        static double dampingFactor;
+        static double randomJumpFactor;
         static int numberOfPages;
         double newPageRank;
 
@@ -102,7 +102,7 @@ public class PageRank {
             node = new Node();
             sum = 0;
             i = 0;
-            dampingFactor = Double.parseDouble(context.getConfiguration().get("damping_factor"));
+            randomJumpFactor = Double.parseDouble(context.getConfiguration().get("random_jump_factor"));
             newPageRank = 0;
             numberOfPages = Integer.parseInt(context.getConfiguration().get("number_of_pages"));
         }
@@ -127,7 +127,7 @@ public class PageRank {
             }
 
             //compute new page rank
-            newPageRank = (dampingFactor * (1 / ((double) (numberOfPages)))) + ((1-dampingFactor) * sum);
+            newPageRank = (randomJumpFactor * (1 / ((double) (numberOfPages)))) + ((1-randomJumpFactor) * sum);
 
             if((100*((Math.abs(node.getPageRank()-newPageRank))/node.getPageRank())) > 0.5) {
                 context.getCounter(CustomCounter.CONVERGENCE).increment(1);
