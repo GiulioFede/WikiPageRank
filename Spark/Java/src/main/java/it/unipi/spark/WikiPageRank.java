@@ -53,12 +53,13 @@ public class WikiPageRank implements Serializable {
         JavaSparkContext sc = new JavaSparkContext(configuration);
         sc.setLogLevel("ERROR");
 
-        if(args.length < 2) {
+        if(args.length < 3) {
             System.out.println("Usage: <#iterations> <file_input>");
             System.exit(-1);
         }
         int iterations = Integer.parseInt(args[0]);
         String file_input = args[1];
+        String file_output = args[2];
 
         JavaRDD<String> wiki_rdd = sc.textFile(file_input);
 
@@ -111,7 +112,7 @@ public class WikiPageRank implements Serializable {
 
         JavaRDD<Tuple2<String,Double>> pageRanksOrderedRdd = sc.parallelize(pageRanksOrdered);
 
-        pageRanksOrderedRdd.saveAsTextFile("sparkJavaOutput_5");
+        pageRanksOrderedRdd.saveAsTextFile(file_output);
 
         sc.stop();
     }
