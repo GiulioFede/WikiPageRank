@@ -54,9 +54,10 @@ public class WikiPageRank implements Serializable {
         sc.setLogLevel("ERROR");
 
         if(args.length < 3) {
-            System.out.println("Usage: <#iterations> <file_input>");
+            System.out.println("Usage: <#iterations> <file_input> <file_output>");
             System.exit(-1);
         }
+
         int iterations = Integer.parseInt(args[0]);
         String file_input = args[1];
         String file_output = args[2];
