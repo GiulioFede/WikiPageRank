@@ -42,7 +42,7 @@ public class RankSort {
             Matcher match = separator_pat.matcher(value.toString());
             if(match.find()) {
                 title = match.group(1);
-                match.find(); // FIX: serve?
+                match.find();
             }
             if(match.find())
                 rank = Double.parseDouble(match.group(1));
